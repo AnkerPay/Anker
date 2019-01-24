@@ -1,5 +1,8 @@
+<p align="center"><img src="https://ankerid.com/images/logo.png" /></p>
+
 Anker Core integration/staging repository
 =====================================
+
 https://ankerid.com/
 
 https://explorer.ankerid.com
