@@ -1,7 +1,6 @@
 Anker Core integration/staging repository
 =====================================
 
-[![Build Status]
 
 Anker is a cutting edge cryptocurrency, with many features not available in most other cryptocurrencies.
 - Anonymized transactions using zerocoin technology
@@ -10,9 +9,6 @@ Anker is a cutting edge cryptocurrency, with many features not available in most
   with collateral of 10K ANK
 - Decentralized blockchain voting utilizing Masternode technology to form a DAO. The blockchain will distribute monthly treasury funds based on successful proposals submitted by the community and voted on by the DAO.
 
-17.6M anker was produced for swapping. 500k were mined 1-200 blocks to bring that amount to 18.1M ANK, the amount needed for the swap.
-
-Since then, the Anker repository has been rebaselined to show the fork relationship properly.
 
 ## BCT Thread ##
 
