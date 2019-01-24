@@ -1,0 +1,12 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=Anker
+Comment=Anker P2P Cryptocurrency
+Comment[fr]=Anker, monnaie virtuelle cryptographique pair à pair
+Comment[tr]=Anker, eşten eşe kriptografik sanal para birimi
+Exec=anker-qt %u
+Terminal=false
+Type=Application
+Icon=anker128
+MimeType=x-scheme-handler/anker;
+Categories=Office;Finance;

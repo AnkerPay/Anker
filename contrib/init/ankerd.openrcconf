@@ -1,0 +1,26 @@
+# /etc/conf.d/ankerd: config file for /etc/init.d/ankerd
+
+# Config file location
+#BITCOIND_CONFIGFILE="/etc/anker/anker.conf"
+
+# What directory to write pidfile to?  (created and owned by $BITCOIND_USER)
+#BITCOIND_PIDDIR="/var/run/ankerd"
+
+# What filename to give the pidfile
+#BITCOIND_PIDFILE="${BITCOIND_PIDDIR}/ankerd.pid"
+
+# Where to write ankerd data (be mindful that the blockchain is large)
+#BITCOIND_DATADIR="/var/lib/ankerd"
+
+# User and group to own ankerd process
+#BITCOIND_USER="anker"
+#BITCOIND_GROUP="anker"
+
+# Path to ankerd executable
+#BITCOIND_BIN="/usr/bin/ankerd"
+
+# Nice value to run ankerd under
+#BITCOIND_NICE=0
+
+# Additional options (avoid -conf and -datadir, use flags above)
+BITCOIND_OPTS=""
