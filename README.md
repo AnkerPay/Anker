@@ -1,6 +1,7 @@
 Anker Core integration/staging repository
 =====================================
 https://ankerid.com/
+https://explorer.ankerid.com
 
 Anker is a cutting edge cryptocurrency, with many features not available in most other cryptocurrencies.
 - Alias: Use your email to send to anyone. Each email address is linked to an ANK address.
