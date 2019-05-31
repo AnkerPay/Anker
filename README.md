@@ -29,6 +29,6 @@ https://bitcointalk.org/
 <tr><td>Algo</td><td>Quark</td></tr>
 <tr><td>Block Time</td><td>30 Seconds</td></tr>
 <tr><td>Difficulty Retargeting</td><td>Every Block</td></tr>
-<tr><td>Max Coin Supply (PoS Phase)</td><td>250,000,000 ANK</td></tr>
+<tr><td>Max Coin Supply (PoS Phase)</td><td>247,500,000 ANK</td></tr>
 </table>
 
