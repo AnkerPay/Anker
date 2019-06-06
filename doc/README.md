@@ -11,6 +11,12 @@ The following are some helpful notes on how to run Anker on your native platform
 
 ### Unix
 
+Run the following commands to install required packages:
+##### Debian/Ubuntu:
+```bash
+$ sudo apt-get install libboost-system1.54.0 libboost-filesystem1.54.0 libboost-program-options1.54.0 libboost-thread1.54.0 libboost-chrono1.54.0 libdb5.3++ libevent-pthreads-2.0-5 libzmq3 libminiupnpc8
+```
+
 Unpack the files into a directory and run:
 
 - bin/32/anker-qt (GUI, 32-bit) or bin/32/ankerd (headless, 32-bit)
