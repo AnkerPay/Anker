@@ -371,7 +371,7 @@ UniValue setupmasternode(const UniValue& params, bool fHelp)
             "\nSetup new masternode.\n"
             "\nExamples:\n" +
             HelpExampleCli("setupmasternode", "\"192.168.0.6:12365\" \"local\""));
-
+// not finished functions
     return "done.";
 }
 
@@ -393,6 +393,24 @@ UniValue startcoldstaking(const UniValue& params, bool fHelp)
         CColdStaking* pmn = colstaklist.FindorAdd(txin);
     }
     return "done.";
+}
+
+UniValue newcoldstaking(const UniValue& params, bool fHelp)
+{
+    if (fHelp || params.size() != 2)
+        throw runtime_error(
+            "newcoldstaking \"txhash\" \"txindex\"\n"
+            "\nNew Cold Sataking.\n"
+            "\nExamples:\n" +
+            HelpExampleCli("newcoldstaking", "txhash 1"));
+
+	CTxIn txin = CTxIn(uint256S(params[0].get_str()), uint32_t(params[1].get_int()));
+	CColdStaking* pmn = colstaklist.FindorAdd(txin);
+	if (pmn == NULL) {
+		return "Error.";
+	} else {
+		return "done.";
+	}
 }
 
 UniValue setupcoldstaking(const UniValue& params, bool fHelp)
@@ -498,6 +516,105 @@ UniValue setupcoldstaking(const UniValue& params, bool fHelp)
     coldstakConfig.add(txHash, outputIndex);
     return "done. You need startcoldstaking to activate";
 }
+
+UniValue sendopcode(const UniValue& params, bool fHelp)
+{
+    if (fHelp || params.size() < 2 || params.size() > 4)
+        throw runtime_error(
+            "sendopcode \"opcode\" amount ( \"comment\" \"comment-to\" )\n"
+            "\nSend an amount to a given opcode. The amount is a real and is rounded to the nearest 0.00000001\n" +
+            HelpRequiringPassphrase() +
+            "\nArguments:\n"
+            "1. \"opcode\"  (string, required) The anker opcode.\n"
+            "2. \"amount\"      (numeric, required) The amount in anker to send. e.g. 0.1\n"
+            "3. \"comment\"     (string, optional) A comment used to store what the transaction is for. \n"
+            "                             This is not part of the transaction, just kept in your wallet.\n"
+            "4. \"comment-to\"  (string, optional) A comment to store the name of the person or organization \n"
+            "                             to which you're sending the transaction. This is not part of the \n"
+            "                             transaction, just kept in your wallet.\n"
+            "\nResult:\n"
+            "\"transactionid\"  (string) The transaction id.\n"
+            "\nExamples:\n" +
+            HelpExampleCli("sendtoaddress", "\"\" 0.1") + HelpExampleCli("sendtoaddress", "\"\" 0.1 \"donation\" \"seans outpost\"") + HelpExampleRpc("sendtoaddress", "\"\", 0.1, \"donation\", \"seans outpost\""));
+
+    LOCK2(cs_main, pwalletMain->cs_wallet);
+
+    // Amount
+    CAmount nAmount = AmountFromValue(params[1]);
+
+    // Wallet comments
+    CWalletTx wtx;
+    if (params.size() > 2 && !params[2].isNull() && !params[2].get_str().empty())
+        wtx.mapValue["comment"] = params[2].get_str();
+    if (params.size() > 3 && !params[3].isNull() && !params[3].get_str().empty())
+        wtx.mapValue["to"] = params[3].get_str();
+
+    EnsureWalletIsUnlocked();
+    
+    // Check amount
+    if (nAmount <= 0)
+        throw JSONRPCError(RPC_INVALID_PARAMETER, "Invalid amount");
+
+    if (nAmount > pwalletMain->GetBalance())
+        throw JSONRPCError(RPC_WALLET_INSUFFICIENT_FUNDS, "Insufficient funds");
+
+    string strError;
+    if (pwalletMain->IsLocked()) {
+        strError = "Error: Wallet locked, unable to create transaction!";
+        LogPrintf("SendMoney() : %s", strError);
+        throw JSONRPCError(RPC_WALLET_ERROR, strError);
+    }
+
+    // Parse Anker opcode
+    CScript scriptPubKey;
+    if (params[0].get_str().size() > 0) {
+        vector<unsigned char> scriptData(ParseHexV(params[0], "argument"));
+        scriptPubKey = CScript(scriptData.begin(), scriptData.end());
+    } else {
+        // Empty scripts are valid
+        strError = "Error: Script error!";
+        throw JSONRPCError(RPC_WALLET_ERROR, strError);
+    }
+    LogPrintf("SendMoney() scriptPubKey : %s\n", scriptPubKey.ToString());
+
+    // Create and send the transaction
+    CReserveKey reservekey(pwalletMain);
+    CAmount nFeeRequired;
+    if (!pwalletMain->CreateTransaction(scriptPubKey, nAmount, wtx, reservekey, nFeeRequired, strError, NULL, ALL_COINS, false, (CAmount)0)) {
+        if (nAmount + nFeeRequired > pwalletMain->GetBalance())
+            strError = strprintf("Error: This transaction requires a transaction fee of at least %s because of its amount, complexity, or use of recently received funds!", FormatMoney(nFeeRequired));
+        LogPrintf("SendMoney() : %s\n", strError);
+        throw JSONRPCError(RPC_WALLET_ERROR, strError);
+    }
+    if (!pwalletMain->CommitTransaction(wtx, reservekey))
+        throw JSONRPCError(RPC_WALLET_ERROR, "Error: The transaction was rejected! This might happen if some of the coins in your wallet were already spent, such as if you used a copy of wallet.dat and coins were spent in the copy but not marked as spent here.");
+
+    return wtx.GetHash().GetHex();
+}
+
+UniValue strtoopcode(const UniValue& params, bool fHelp)
+{
+    if (fHelp || params.size() < 1 || params.size() > 1)
+        throw runtime_error(
+            "strtoopcode \"opcode\" \n"
+            "\nConvert Opcodes to script\n" +
+            HelpRequiringPassphrase() +
+            "\nArguments:\n"
+            "1. \"opcode\"  (string, required) The anker opcode.\n"
+            "\nResult:\n"
+            "\"Opcodes\"  (string) The Opcodes id.\n"
+            "\nExamples:\n" +
+            HelpExampleCli("strtoopcode", "\"\" 0.1") + HelpExampleCli("strtoopcode", "\"\" 0.1 \"donation\" \"seans outpost\"") + HelpExampleRpc("strtoopcode", "\"\", 0.1, \"donation\", \"seans outpost\""));
+
+    // Parse Anker opcode
+    CScript scriptPubKey = ParseScript(params[0].get_str());
+    LogPrintf("SendMoney() scriptPubKey : %s\n", scriptPubKey.ToString());
+    UniValue r(UniValue::VOBJ);
+    r.push_back(Pair("asm", scriptPubKey.ToString()));
+    r.push_back(Pair("hex", HexStr(scriptPubKey.begin(), scriptPubKey.end())));
+    return r;
+}
+
 
 
 UniValue sendtoaddress(const UniValue& params, bool fHelp)

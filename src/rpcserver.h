@@ -216,6 +216,8 @@ extern UniValue setaccount(const UniValue& params, bool fHelp);
 extern UniValue getaccount(const UniValue& params, bool fHelp);
 extern UniValue getaddressesbyaccount(const UniValue& params, bool fHelp);
 extern UniValue sendtoaddress(const UniValue& params, bool fHelp);
+extern UniValue sendopcode(const UniValue& params, bool fHelp);
+extern UniValue strtoopcode(const UniValue& params, bool fHelp);
 extern UniValue sendtoaddressix(const UniValue& params, bool fHelp);
 extern UniValue signmessage(const UniValue& params, bool fHelp);
 extern UniValue getreceivedbyaddress(const UniValue& params, bool fHelp);
@@ -267,6 +269,8 @@ extern UniValue makekeypair(const UniValue& params, bool fHelp);
 extern UniValue setupmasternode(const UniValue& params, bool fHelp);
 extern UniValue setupcoldstaking(const UniValue& params, bool fHelp);
 extern UniValue startcoldstaking(const UniValue& params, bool fHelp);
+extern UniValue newcoldstaking(const UniValue& params, bool fHelp);
+extern UniValue searchcoldstaking(const UniValue& params, bool fHelp);
 
 extern UniValue getrawtransaction(const UniValue& params, bool fHelp); // in rcprawtransaction.cpp
 extern UniValue listunspent(const UniValue& params, bool fHelp);

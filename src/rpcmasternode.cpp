@@ -288,6 +288,29 @@ UniValue listcoldstakers(const UniValue& params, bool fHelp)
     return ret;
 }
 
+UniValue searchcoldstaking(const UniValue& params, bool fHelp)
+{
+
+    if (fHelp || (params.size() != 1))
+        throw runtime_error(
+            "searchcoldstaking  address\n"
+            "\nsearch cold stakers\n"
+            "\nExamples:\n" +
+            HelpExampleCli("listcoldstakers", "") + HelpExampleRpc("listcoldstakers", ""));
+
+    UniValue ret(UniValue::VARR);
+    BOOST_FOREACH(PAIRTYPE(const uint256, CColdStaking)& coldstak, colstaklist.mapColdStaking) {
+		if (coldstak.second.strAddress == params[0].get_str()) {
+			UniValue obj(UniValue::VOBJ);
+			obj.push_back(Pair("Address", coldstak.second.strAddress));
+			obj.push_back(Pair("sigTime", coldstak.second.sigTime));
+			obj.push_back(Pair("payTime", coldstak.second.payTime));
+			ret.push_back(obj);
+		}
+    }
+    return ret;
+}
+
 UniValue coldstakerscount(const UniValue& params, bool fHelp)
 {
 

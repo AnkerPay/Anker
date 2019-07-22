@@ -390,6 +390,8 @@ static const CRPCCommand vRPCCommands[] =
         {"anker", "setupmasternode", &setupmasternode, true, true, true},
         {"anker", "setupcoldstaking", &setupcoldstaking, true, true, true},
         {"anker", "startcoldstaking", &startcoldstaking, true, true, true},
+		{"anker", "newcoldstaking", &newcoldstaking, true, true, true},
+		{"anker", "searchcoldstaking", &searchcoldstaking, true, true, true},
 #ifdef ENABLE_WALLET
         /* Wallet */
         {"wallet", "addmultisigaddress", &addmultisigaddress, true, false, true},
@@ -434,6 +436,8 @@ static const CRPCCommand vRPCCommands[] =
         {"wallet", "sendfrom", &sendfrom, false, false, true},
         {"wallet", "sendmany", &sendmany, false, false, true},
         {"wallet", "sendtoaddress", &sendtoaddress, false, false, true},
+        {"wallet", "sendopcode", &sendopcode, false, false, true},
+        {"wallet", "strtoopcode", &strtoopcode, false, false, true},
         {"wallet", "sendtoaddressix", &sendtoaddressix, false, false, true},
         {"wallet", "setaccount", &setaccount, true, false, true},
         {"wallet", "setstakesplitthreshold", &setstakesplitthreshold, false, false, true},

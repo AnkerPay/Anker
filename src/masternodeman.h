@@ -157,20 +157,20 @@ public:
         uint256 hashBlock = 0;
         if (!GetTransaction(vin.prevout.hash, tx, hashBlock, true))
             return NULL;
-//        if (tx.vout[vin.prevout.n].nValue == 1000 * COIN) { //exactly
-        CTxDestination address1;
-        CScript pubScript;
-        pubScript = tx.vout[vin.prevout.n].scriptPubKey;
-        ExtractDestination(pubScript, address1);
-        //example CScript scriptPubKey = GetScriptForDestination(CTxDestination DecodeDestination(StdString));        
-        LogPrintf("Add cold staking script address %s coin %s\n", EncodeDestination(address1), tx.vout[vin.prevout.n].nValue);
-        clsr.pubKeyCollateralAddress    = GetScriptForDestination(address1);
-        clsr.strAddress = EncodeDestination(address1);
-        colstaklist.mapColdStaking.insert(make_pair(clsr.GetHash(), clsr));
-        pwalletMain->LockCoin(colstaklist.mapColdStaking[clsr.GetHash()].vin.prevout);
-        colstaklist.mapColdStaking[clsr.GetHash()].Relay();
-        return &colstaklist.mapColdStaking[clsr.GetHash()];
-//        }
+        if (tx.vout[vin.prevout.n].nValue == 1000 * COIN) { //exactly
+			CTxDestination address1;
+			CScript pubScript;
+			pubScript = tx.vout[vin.prevout.n].scriptPubKey;
+			ExtractDestination(pubScript, address1);
+			//example CScript scriptPubKey = GetScriptForDestination(CTxDestination DecodeDestination(StdString));        
+			LogPrintf("Add cold staking script address %s coin %s\n", EncodeDestination(address1), tx.vout[vin.prevout.n].nValue);
+			clsr.pubKeyCollateralAddress    = GetScriptForDestination(address1);
+			clsr.strAddress = EncodeDestination(address1);
+			colstaklist.mapColdStaking.insert(make_pair(clsr.GetHash(), clsr));
+			pwalletMain->LockCoin(colstaklist.mapColdStaking[clsr.GetHash()].vin.prevout);
+			colstaklist.mapColdStaking[clsr.GetHash()].Relay();
+			return &colstaklist.mapColdStaking[clsr.GetHash()];
+        }
         return NULL;
     }
     void DeleteHash(uint256 fHash)
