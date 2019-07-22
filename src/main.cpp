@@ -2234,9 +2234,9 @@ int64_t GetMasternodePayment(int nHeight, int64_t blockValue, int nMasternodeCou
     if (currentNode) {
         nMasternodeActiveHeight = (int)((currentNode->lastPing.sigTime - currentNode->sigTime)/60) * 2;
     }
-    //int threeMonthHeight = 2 * 60 * 24 * 30 * 3;
+    int threeMonthHeight = 2 * 60 * 24 * 30 * 3;
     // for test set to 1 day
-    int threeMonthHeight = 2 * 60 * 24;
+    //int threeMonthHeight = 2 * 60 * 24;
     double fSubsidyAdjustmentPercentage = 0.75;
     if (nHeight > 9860800) {
         fSubsidyAdjustmentPercentage = 0.7;
