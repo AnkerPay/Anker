@@ -145,11 +145,11 @@ public:
         nRejectBlockOutdatedMajority = 950;
         nToCheckBlockUpgradeMajority = 1000;
         nMinerThreads = 0;
-        nTargetTimespan = 1 * 60; // Anker: 1 minute
+        nTargetTimespan = 60 * 60; // Anker: 1 hour
         nTargetSpacing = 30;  // Anker: 30 sec
         nMaturity = 50;
         nMasternodeCountDrift = 20;
-        nMaxMoneyOut = 250000000 * COIN;
+        nMaxMoneyOut = 247500000 * COIN;
 
         /** Height or Time Based Activations **/
         nLastPOWBlock = 500;
@@ -194,9 +194,9 @@ public:
         //vFixedSeeds.clear();
         //vSeeds.clear();
         vSeeds.push_back(CDNSSeedData("0", "dnsseed.ankerid.com")); // run by Anker
-        //vSeeds.push_back(CDNSSeedData("1", "anker.seed.rho.industries")); // run by Julian Meyer (meyer9)
+        //vSeeds.push_back(CDNSSeedData("1", "anker.seed.ankerid.com")); // run by 
 
-        base58Prefixes[PUBKEY_ADDRESS] = std::vector<unsigned char>(1, 55);
+        base58Prefixes[PUBKEY_ADDRESS] = std::vector<unsigned char>(1, 23);
         base58Prefixes[SCRIPT_ADDRESS] = std::vector<unsigned char>(1, 13);
         base58Prefixes[SECRET_KEY] = std::vector<unsigned char>(1, 212);
         base58Prefixes[EXT_PUBLIC_KEY] = boost::assign::list_of(0x02)(0x2D)(0x25)(0x33).convert_to_container<std::vector<unsigned char> >();
@@ -219,7 +219,7 @@ public:
 
         nPoolMaxTransactions = 3;
         strSporkKey = "04e8fa0e3d22df65a5b2e5a0c1dff1ab659ab461cee07c55a04063a31f217b3a4f3b0050ebb6490d2bd486a260ab9a7998d0d8fe2eb7e3f83f6b6b517aefc34b00";
-        strObfuscationPoolDummyAddress = "PCYiHgGJJ6xGHqivmdZrYjRnhaYf6AJ2Mp";
+        strObfuscationPoolDummyAddress = "ACYiHgGJJ6xGHqivmdZrYjRnhaYf6AJ2Mp";
 
         /** Zerocoin */
         zerocoinModulus = "25195908475657893494027183240048398571429282126204032027777137836043662020707595556264018525880784"
@@ -266,8 +266,8 @@ public:
         nRejectBlockOutdatedMajority = 75;
         nToCheckBlockUpgradeMajority = 100;
         nMinerThreads = 0;
-        nTargetTimespan = 1 * 60; // Anker: 1 day
-        nTargetSpacing = 1 * 10;  // Anker: 1 minute
+        nTargetTimespan = 60 * 60; // Anker: 1 hour
+        nTargetSpacing = 1 * 30;  // Anker: 30 sec
         nMaturity = 15;
         nMasternodeCountDrift = 4;
         nModifierUpdateBlock = 51197; //approx Mon, 17 Apr 2017 04:00:00 GMT
@@ -317,7 +317,7 @@ public:
 
         nPoolMaxTransactions = 2;
         strSporkKey = "043320ffe7c5e2d8ea82960cacf0a1a59dd5fc179c4d00bec92c469cbf337b0936a17d0b3daaa26a4ab22e2a788781be061b022a459b0212939488ac77243417bf"; 
-        strObfuscationPoolDummyAddress = "PCYiHgGJJ6xGHqivmdZrYjRnhaYf6AJ2Mp";
+        strObfuscationPoolDummyAddress = "ACYiHgGJJ6xGHqivmdZrYjRnhaYf6AJ2Mp";
         nBudgetFeeConfirmations = 3; // Number of confirmations for the finalization fee. We have to make this very short
                                      // here because we only have a 8 block finalization window on testnet
     }
@@ -347,8 +347,8 @@ public:
         nRejectBlockOutdatedMajority = 950;
         nToCheckBlockUpgradeMajority = 1000;
         nMinerThreads = 1;
-        nTargetTimespan = 24 * 60 * 60; // Anker: 1 day
-        nTargetSpacing = 1 * 60;        // Anker: 1 minutes
+        nTargetTimespan = 60 * 60; // Anker: 1 hour
+        nTargetSpacing = 1 * 30;        // Anker: 30sec
         bnProofOfWorkLimit = ~uint256(0) >> 1;
         genesis.nTime = 1539180002;
         genesis.nBits = 0x207fffff;
