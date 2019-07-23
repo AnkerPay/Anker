@@ -30,7 +30,7 @@ CAmount GetBudgetSystemCollateralAmount(int nHeight) {
     if (nHeight <= 250000) {
         return 50 * COIN;
     } else {
-        return 25 * COIN;
+        return 50 * COIN;
     }
 }
 
@@ -68,7 +68,7 @@ bool IsBudgetCollateralValid(uint256 nTxCollateralHash, uint256 nExpectedHash, s
         }
         if (fBudgetFinalization) {
             // Collateral for budget finalization
-            // Note: there are still old valid budgets out there, but the check for the new 5 PIV finalization collateral
+            // Note: there are still old valid budgets out there, but the check for the new 5 ANK finalization collateral
             //       will also cover the old 50 ANK finalization collateral.
             LogPrint("mnbudget", "Final Budget: o.scriptPubKey(%s) == findScript(%s) ?\n", o.scriptPubKey.ToString(), findScript.ToString());
             if (o.scriptPubKey == findScript) {
@@ -170,7 +170,7 @@ void CBudgetManager::SubmitFinalBudget()
         return;
     }
  
-    // Submit final budget during the last 2 days (2880 blocks) before payment for Mainnet, about 9 minutes (9 blocks) for Testnet
+    // Submit final budget during the last 2 days (5760 blocks) before payment for Mainnet, about 9 minutes (9 blocks) for Testnet
     int finalizationWindow = ((GetBudgetPaymentCycleBlocks() / 30) * 2);
 
     if (Params().NetworkID() == CBaseChainParams::TESTNET) {
