@@ -2160,7 +2160,7 @@ double ConvertBitsToDouble(unsigned int nBits)
 int64_t GetFullBlockValue(int nHeight)
 {
     if (nHeight == 0) {
-        return 14789222.47 * COIN;
+        return 12289222.47 * COIN;
     } else if (nHeight > 0 && nHeight <= 400000) {
         return 6.25 * COIN;
     } else if (nHeight > 400000 && nHeight <= 1451200) {

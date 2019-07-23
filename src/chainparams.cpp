@@ -145,7 +145,7 @@ public:
         nRejectBlockOutdatedMajority = 950;
         nToCheckBlockUpgradeMajority = 1000;
         nMinerThreads = 0;
-        nTargetTimespan = 60 * 60; // Anker: 1 hour
+        nTargetTimespan = 30;  // Anker: 30 sec
         nTargetSpacing = 30;  // Anker: 30 sec
         nMaturity = 50;
         nMasternodeCountDrift = 20;
@@ -153,7 +153,7 @@ public:
 
         /** Height or Time Based Activations **/
         nLastPOWBlock = 500;
-        nModifierUpdateBlock = 468744;
+        nModifierUpdateBlock = 100;
         nZerocoinStartHeight = 501;
 
         const char* pszTimestamp = "10 Octobar 2018";
@@ -256,7 +256,7 @@ public:
         nRejectBlockOutdatedMajority = 75;
         nToCheckBlockUpgradeMajority = 100;
         nMinerThreads = 0;
-        nTargetTimespan = 60 * 60; // Anker: 1 hour
+        nTargetTimespan = 30;  // Anker: 30 sec
         nTargetSpacing = 1 * 30;  // Anker: 30 sec
         nMaturity = 15;
         nMasternodeCountDrift = 4;
@@ -337,7 +337,7 @@ public:
         nRejectBlockOutdatedMajority = 950;
         nToCheckBlockUpgradeMajority = 1000;
         nMinerThreads = 1;
-        nTargetTimespan = 60 * 60; // Anker: 1 hour
+        nTargetTimespan = 30;  // Anker: 30 sec
         nTargetSpacing = 1 * 30;        // Anker: 30sec
         bnProofOfWorkLimit = ~uint256(0) >> 1;
         genesis.nTime = 1539180002;
