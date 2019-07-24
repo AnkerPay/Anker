@@ -262,10 +262,10 @@ public:
         nMasternodeCountDrift = 4;
         nModifierUpdateBlock = 51197; //approx Mon, 17 Apr 2017 04:00:00 GMT
         nMaxMoneyOut = 43199500 * COIN;
-        nLastPOWBlock = 5000;
-        nZerocoinStartHeight = 10000;
+        nLastPOWBlock = 500;
+        nZerocoinStartHeight = 100;
 
-        nZerocoinLastOldParams = 50000;
+        nZerocoinLastOldParams = 30;
 
         //! Modify the testnet genesis block so the timestamp is valid for a later start.
         genesis.nTime = 1539180001;
@@ -345,8 +345,8 @@ public:
         genesis.nNonce = 0;
         nMaturity = 0;
         nLastPOWBlock = 999999999; // PoS complicates Regtest because of timing issues
-        nZerocoinLastOldParams = 499;
-        nZerocoinStartHeight = 100;
+        nZerocoinLastOldParams = 30;
+        nZerocoinStartHeight = 30;
 /*
 
         uint256 hash;
