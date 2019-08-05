@@ -21,7 +21,7 @@ The basic reasoning for these requirements is that, you get to keep your ANK in 
 1) Using the wallet, open "Masternodes" page and press "New Masternode" button:
 2) enter the your unique public ip address for your VPS, uncheck "Local Masternode with hot wallet" checkbox and click ok:
 
-![Fig1](img/mn1.png)
+![Fig1](img/mn2.png)
 
 3) Click on "details" button and copy all text to clipboard
 4) Install the latest version of the ANK wallet onto your masternode. The lastest version can be found here: https://github.com/ankerid/Anker
