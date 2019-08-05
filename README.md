@@ -4,6 +4,7 @@ Anker Core integration/staging repository
 =====================================
 
 https://ankerid.com/
+https://ankerpay.com/
 
 https://explorer.ankerid.com
 
@@ -22,7 +23,7 @@ Anker is a cutting edge cryptocurrency, with many features not available in most
 
 ## BCT Thread ##
 
-https://bitcointalk.org/
+https://bitcointalk.org/index.php?topic=5171545.0
 
 ## Coin Specs ##
 <table>
