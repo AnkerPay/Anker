@@ -2,8 +2,8 @@
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#include "zphrcontroldialog.h"
-#include "ui_zphrcontroldialog.h"
+#include "zankcontroldialog.h"
+#include "ui_zankcontroldialog.h"
 
 #include "accumulators.h"
 #include "main.h"

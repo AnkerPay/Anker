@@ -297,85 +297,6 @@
          </property>
         </spacer>
        </item>
-       <item>
-        <widget class="QCheckBox" name="checkBoxZeromintEnable">
-         <property name="toolTip">
-          <string>Enable automatic minting of Anker units to zANK</string>
-         </property>
-         <property name="layoutDirection">
-          <enum>Qt::LeftToRight</enum>
-         </property>
-         <property name="text">
-          <string>Enable zANK Automint</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_3">
-         <item>
-          <widget class="QLabel" name="percentage_label">
-           <property name="toolTip">
-            <string>Percentage of incoming ANK which get automatically converted to zANK via Zerocoin Protocol (min: 10%)</string>
-           </property>
-           <property name="text">
-            <string>Percentage of autominted zANK</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QSpinBox" name="zeromintPercentage">
-           <property name="minimum">
-            <number>10</number>
-           </property>
-           <property name="maximum">
-            <number>100</number>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,0">
-         <property name="sizeConstraint">
-          <enum>QLayout::SetFixedSize</enum>
-         </property>
-         <item>
-          <widget class="QLabel" name="labelPreferredDenom">
-           <property name="maximumSize">
-            <size>
-             <width>16777215</width>
-             <height>16777215</height>
-            </size>
-           </property>
-           <property name="toolTip">
-            <string>Wait with automatic conversion to Zerocoin until enough ANK for this denomination is available</string>
-           </property>
-           <property name="text">
-            <string>Preferred Automint zANK Denomination</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QComboBox" name="preferredDenom">
-           <property name="maximumSize">
-            <size>
-             <width>16777215</width>
-             <height>27</height>
-            </size>
-           </property>
-           <property name="toolTip">
-            <string>Wait with automatic conversion to Zerocoin until enough ANK for this denomination is available</string>
-           </property>
-           <property name="maxVisibleItems">
-            <number>9</number>
-           </property>
-           <property name="maxCount">
-            <number>9</number>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
       </layout>
      </widget>
      <widget class="QWidget" name="tabWallet">
@@ -427,16 +348,6 @@
             </property>
             <property name="text">
              <string>Show Masternodes Tab</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QCheckBox" name="spendZeroConfChange">
-            <property name="toolTip">
-             <string>If you disable the spending of unconfirmed change, the change from a transaction&lt;br/&gt;cannot be used until that transaction has at least one confirmation.&lt;br/&gt;This also affects how your balance is computed.</string>
-            </property>
-            <property name="text">
-             <string>&amp;Spend unconfirmed change</string>
             </property>
            </widget>
           </item>

@@ -241,18 +241,18 @@ void OverviewPage::setBalance(const CAmount& balance, const CAmount& unconfirmed
     ui->labelWatchTotal->setText(BitcoinUnits::floorHtmlWithUnit(nDisplayUnit, nTotalWatchBalance, false, BitcoinUnits::separatorAlways));
 
     // zANK labels
-    ui->labelzBalance->setText(BitcoinUnits::floorHtmlWithUnit(nDisplayUnit, zerocoinBalance, false, BitcoinUnits::separatorAlways));
+/*    ui->labelzBalance->setText(BitcoinUnits::floorHtmlWithUnit(nDisplayUnit, zerocoinBalance, false, BitcoinUnits::separatorAlways));
     ui->labelzBalanceUnconfirmed->setText(BitcoinUnits::floorHtmlWithUnit(nDisplayUnit, unconfirmedZerocoinBalance, false, BitcoinUnits::separatorAlways));
     ui->labelzBalanceMature->setText(BitcoinUnits::floorHtmlWithUnit(nDisplayUnit, matureZerocoinBalance, false, BitcoinUnits::separatorAlways));
     ui->labelzBalanceImmature->setText(BitcoinUnits::floorHtmlWithUnit(nDisplayUnit, immatureZerocoinBalance, false, BitcoinUnits::separatorAlways));
-
+*/
     // Combined labels
     ui->labelBalancez->setText(BitcoinUnits::floorHtmlWithUnit(nDisplayUnit, availableTotalBalance, false, BitcoinUnits::separatorAlways));
     ui->labelTotalz->setText(BitcoinUnits::floorHtmlWithUnit(nDisplayUnit, sumTotalBalance, false, BitcoinUnits::separatorAlways));
 
     // Percentage labels
     ui->labelANKPercent->setText(sPercentage);
-    ui->labelzANKPercent->setText(szPercentage);
+    //ui->labelzANKPercent->setText(szPercentage);
 
     // Adjust bubble-help according to AutoMint settings
     QString automintHelp = tr("Current percentage of zANK.\nIf AutoMint is enabled this percentage will settle around the configured AutoMint percentage (default = 10%).\n");
@@ -296,15 +296,16 @@ void OverviewPage::setBalance(const CAmount& balance, const CAmount& unconfirmed
     bool showzANKAvailable = settingShowAllBalances || zerocoinBalance != matureZerocoinBalance;
     bool showzANKUnconfirmed = settingShowAllBalances || unconfirmedZerocoinBalance != 0;
     bool showzANKImmature = settingShowAllBalances || immatureZerocoinBalance != 0;
-    ui->labelzBalanceMature->setVisible(showzANKAvailable);
+/*    ui->labelzBalanceMature->setVisible(showzANKAvailable);
     ui->labelzBalanceMatureText->setVisible(showzANKAvailable);
     ui->labelzBalanceUnconfirmed->setVisible(showzANKUnconfirmed);
     ui->labelzBalanceUnconfirmedText->setVisible(showzANKUnconfirmed);
     ui->labelzBalanceImmature->setVisible(showzANKImmature);
     ui->labelzBalanceImmatureText->setVisible(showzANKImmature);
+*/
     bool showPercentages = ! (zerocoinBalance == 0 && nTotalBalance == 0);
     ui->labelANKPercent->setVisible(showPercentages);
-    ui->labelzANKPercent->setVisible(showPercentages);
+//    ui->labelzANKPercent->setVisible(showPercentages);
 
     static int cachedTxLocks = 0;
 

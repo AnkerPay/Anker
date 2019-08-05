@@ -203,7 +203,7 @@ string CRPCTable::help(string strCommand) const
         // We already filter duplicates, but these deprecated screw up the sort order
         if (strMethod.find("label") != string::npos)
             continue;
-        if ((strCommand != "" || pcmd->category == "hidden") && strMethod != strCommand)
+        if ((strCommand != "" || pcmd->category == "hidden" || pcmd->category == "zerocoin") && strMethod != strCommand)
             continue;
 #ifdef ENABLE_WALLET
         if (pcmd->reqWallet && !pwalletMain)
@@ -460,8 +460,8 @@ static const CRPCCommand vRPCCommands[] =
         {"zerocoin", "exportzerocoins", &exportzerocoins, false, false, true},
         {"zerocoin", "reconsiderzerocoins", &reconsiderzerocoins, false, false, true},
         {"zerocoin", "getspentzerocoinamount", &getspentzerocoinamount, false, false, false},
-        {"zerocoin", "getzphrseed", &getzphrseed, false, false, true},
-        {"zerocoin", "setzphrseed", &setzphrseed, false, false, true}
+        {"zerocoin", "getzankseed", &getzankseed, false, false, true},
+        {"zerocoin", "setzankseed", &setzankseed, false, false, true}
 
 #endif // ENABLE_WALLET
 };

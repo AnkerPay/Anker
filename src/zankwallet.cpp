@@ -2,7 +2,7 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#include "zphrwallet.h"
+#include "zankwallet.h"
 #include "main.h"
 #include "txdb.h"
 #include "walletdb.h"
@@ -20,7 +20,7 @@ CzANKWallet::CzANKWallet(std::string strWalletFile)
     uint256 hashSeed;
     bool fFirstRun = !walletdb.ReadCurrentSeedHash(hashSeed);
 
-    //Check for old db version of storing zphr seed
+    //Check for old db version of storing zank seed
     if (fFirstRun) {
         uint256 seed;
         if (walletdb.ReadZANKSeed_deprecated(seed)) {
@@ -32,7 +32,7 @@ CzANKWallet::CzANKWallet(std::string strWalletFile)
                     LogPrintf("%s: Updated zANK seed databasing\n", __func__);
                     fFirstRun = false;
                 } else {
-                    LogPrintf("%s: failed to remove old zphr seed\n", __func__);
+                    LogPrintf("%s: failed to remove old zank seed\n", __func__);
                 }
             }
         }
@@ -54,7 +54,7 @@ CzANKWallet::CzANKWallet(std::string strWalletFile)
         key.MakeNewKey(true);
         seed = key.GetPrivKey_256();
         seedMaster = seed;
-        LogPrintf("%s: first run of zphr wallet detected, new seed generated. Seedhash=%s\n", __func__, Hash(seed.begin(), seed.end()).GetHex());
+        LogPrintf("%s: first run of zank wallet detected, new seed generated. Seedhash=%s\n", __func__, Hash(seed.begin(), seed.end()).GetHex());
     } else if (!pwalletMain->GetDeterministicSeed(hashSeed, seed)) {
         LogPrintf("%s: failed to get deterministic seed for hashseed %s\n", __func__, hashSeed.GetHex());
         return;
@@ -202,7 +202,7 @@ void CzANKWallet::SyncWithChain(bool fGenerateMintPool)
             if (ShutdownRequested())
                 return;
 
-            if (pwalletMain->zphrTracker->HasPubcoinHash(pMint.first)) {
+            if (pwalletMain->zankTracker->HasPubcoinHash(pMint.first)) {
                 mintPool.Remove(pMint.first);
                 continue;
             }
@@ -325,8 +325,8 @@ bool CzANKWallet::SetMintSeen(const CBigNum& bnValue, const int& nHeight, const 
         pwalletMain->AddToWallet(wtx);
     }
 
-    // Add to zphrTracker which also adds to database
-    pwalletMain->zphrTracker->Add(dMint, true);
+    // Add to zankTracker which also adds to database
+    pwalletMain->zankTracker->Add(dMint, true);
     
     //Update the count if it is less than the mint's count
     if (nCountLastUsed < pMint.second) {

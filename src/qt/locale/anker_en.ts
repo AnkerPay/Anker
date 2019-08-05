@@ -5942,7 +5942,7 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
 <context>
     <name>ZAnkControlDialog</name>
     <message>
-        <location filename="../forms/zphrcontroldialog.ui" line="+20"/>
+        <location filename="../forms/zankcontroldialog.ui" line="+20"/>
         <source>Select zAnk to Spend</source>
         <translation type="unfinished"></translation>
     </message>

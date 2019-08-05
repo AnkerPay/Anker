@@ -234,8 +234,8 @@ CBlockTemplate* CreateNewBlock(const CScript& scriptPubKeyIn, CWallet* pwallet, 
                     nTotalIn = tx.GetZerocoinSpent();
 
                     //Give a high priority to zerocoinspends to get into the next block
-                    //Priority = (age^6+100000)*amount - gives higher priority to zphrs that have been in mempool long
-                    //and higher priority to zphrs that are large in value
+                    //Priority = (age^6+100000)*amount - gives higher priority to zanks that have been in mempool long
+                    //and higher priority to zanks that are large in value
                     int64_t nTimeSeen = GetAdjustedTime();
                     double nConfs = 100000;
 
@@ -461,6 +461,7 @@ CBlockTemplate* CreateNewBlock(const CScript& scriptPubKeyIn, CWallet* pwallet, 
             bool fStakeFound = false;
             if (nSearchTime >= nLastCoinStakeSearchTime) {
                 unsigned int nTxNewTime = 0;
+                LogPrintf("CreateNewBlock(): create coin stake \n");
                 if (pwallet->CreateCoinStake(*pwallet, pblock->nBits, nSearchTime - nLastCoinStakeSearchTime, txCoinStake, nTxNewTime, nFees)) {
                     pblock->nTime = nTxNewTime;
                     pblock->vtx[1] = CTransaction(txCoinStake);
@@ -469,6 +470,9 @@ CBlockTemplate* CreateNewBlock(const CScript& scriptPubKeyIn, CWallet* pwallet, 
                 nLastCoinStakeSearchInterval = nSearchTime - nLastCoinStakeSearchTime;
                 nLastCoinStakeSearchTime = nSearchTime;
             }
+
+            if (!fStakeFound)
+                LogPrintf("CreateNewBlock(): stake not found \n");
 
             if (!fStakeFound)
                 return NULL;
@@ -617,7 +621,7 @@ void BitcoinMiner(CWallet* pwallet, bool fProofOfStake)
                 MilliSleep(5000);
                 continue;
             }
-            // Test if everithig ok or exit mining
+            // Test if everything ok or exit mining
             while (chainActive.Tip()->nTime < 1504595227 || vNodes.empty() || pwallet->IsLocked() || 
                    nReserveBalance >= pwallet->GetBalance() || !masternodeSync.IsSynced()) {
                 nLastCoinStakeSearchInterval = 0;

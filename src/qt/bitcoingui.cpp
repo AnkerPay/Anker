@@ -347,7 +347,7 @@ void BitcoinGUI::createActions(const NetworkStyle* networkStyle)
 #else
     privacyAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_5));
 #endif
-    tabGroup->addAction(privacyAction);
+   // tabGroup->addAction(privacyAction);
 
 #ifdef ENABLE_WALLET
 
@@ -575,7 +575,7 @@ void BitcoinGUI::createToolBars()
         toolbar->addAction(sendCoinsAction);
         toolbar->addAction(receiveCoinsAction);
         toolbar->addAction(historyAction);
-        toolbar->addAction(privacyAction);
+//        toolbar->addAction(privacyAction);
         QSettings settings;
         if (settings.value("fShowMasternodesTab").toBool()) {
             toolbar->addAction(masternodeAction);
@@ -702,7 +702,7 @@ void BitcoinGUI::createToolBars()
         hometoolbar->addAction(sendCoinsAction);
         hometoolbar->addAction(receiveCoinsAction);
         hometoolbar->addAction(historyAction);
-        hometoolbar->addAction(privacyAction);
+//        hometoolbar->addAction(privacyAction);
         if (settings.value("fShowMasternodesTab").toBool()) {
             hometoolbar->addAction(masternodeAction);
         }
@@ -1021,7 +1021,7 @@ void BitcoinGUI::createTrayIconMenu()
     trayIconMenu->addSeparator();
     trayIconMenu->addAction(sendCoinsAction);
     trayIconMenu->addAction(receiveCoinsAction);
-    trayIconMenu->addAction(privacyAction);
+//    trayIconMenu->addAction(privacyAction);
     trayIconMenu->addSeparator();
     trayIconMenu->addAction(signMessageAction);
     trayIconMenu->addAction(verifyMessageAction);

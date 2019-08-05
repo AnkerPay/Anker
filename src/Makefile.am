@@ -194,8 +194,8 @@ BITCOIN_CORE_H = \
   wallet.h \
   wallet_ismine.h \
   walletdb.h \
-  zphrtracker.h \
-  zphrwallet.h \
+  zanktracker.h \
+  zankwallet.h \
   zmq/zmqabstractnotifier.h \
   zmq/zmqconfig.h \
   zmq/zmqnotificationinterface.h \
@@ -281,8 +281,8 @@ libbitcoin_wallet_a_SOURCES = \
   wallet.cpp \
   wallet_ismine.cpp \
   walletdb.cpp \
-  zphrwallet.cpp \
-  zphrtracker.cpp \
+  zankwallet.cpp \
+  zanktracker.cpp \
   $(BITCOIN_CORE_H)
 
 # crypto primitives library

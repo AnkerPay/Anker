@@ -251,9 +251,15 @@ bool GetKernelStakeModifier(uint256 hashBlockFrom, uint64_t& nStakeModifier, int
     const CBlockIndex* pindexFrom = mapBlockIndex[hashBlockFrom];
     nStakeModifierHeight = pindexFrom->nHeight;
     nStakeModifierTime = pindexFrom->GetBlockTime();
+    if (!pindexFrom) {
+       LogPrintf("CreateCoinStake :  Null pindexFrom %d\n", nStakeModifierHeight);
+    }
+
     int64_t nStakeModifierSelectionInterval = GetStakeModifierSelectionInterval();
     const CBlockIndex* pindex = pindexFrom;
-    CBlockIndex* pindexNext = chainActive[pindexFrom->nHeight + 1];
+    CBlockIndex* pindexNext = chainActive.Next(pindexFrom);
+    LogPrintf("CreateCoinStake :  pindexFrom %d pindexNext %d chain %d \n", nStakeModifierHeight, pindexNext->nHeight, chainActive.Height());
+    //CBlockIndex* pindexNext = chainActive[pindexFrom->nHeight + 1];
 
     // loop to find the stake modifier later by a selection interval
     while (nStakeModifierTime < pindexFrom->GetBlockTime() + nStakeModifierSelectionInterval) {
@@ -261,7 +267,6 @@ bool GetKernelStakeModifier(uint256 hashBlockFrom, uint64_t& nStakeModifier, int
             // Should never happen
             return error("Null pindexNext\n");
         }
-
         pindex = pindexNext;
         pindexNext = chainActive[pindexNext->nHeight + 1];
         if (pindex->GeneratedStakeModifier()) {
@@ -269,6 +274,8 @@ bool GetKernelStakeModifier(uint256 hashBlockFrom, uint64_t& nStakeModifier, int
             nStakeModifierTime = pindex->GetBlockTime();
         }
     }
+    LogPrintf("CreateCoinStake :  nStakeModifierTime %d pindexFrom %d more than %d \n", nStakeModifierTime, pindexNext->nHeight, pindexFrom->GetBlockTime() + nStakeModifierSelectionInterval);
+
     nStakeModifier = pindex->nStakeModifier;
     return true;
 }
@@ -298,10 +305,16 @@ bool CheckStakeKernelHash(unsigned int nBits, const CBlock blockFrom, const CTra
     unsigned int nTimeBlockFrom = blockFrom.GetBlockTime();
 
     if (nTimeTx < nTimeBlockFrom) // Transaction timestamp violation
+    {
+        LogPrintf("CheckStakeKernelHash():  Transaction timestamp violation - nTimeBlockFrom=%d nTimeTx=%d", nTimeBlockFrom, nTimeTx);
         return error("CheckStakeKernelHash() : nTime violation");
+    }
 
     if (nTimeBlockFrom + nStakeMinAge > nTimeTx) // Min age requirement
+    {
+        LogPrintf("CheckStakeKernelHash():  min age violation - nTimeBlockFrom=%d nStakeMinAge=%d nTimeTx=%d", nTimeBlockFrom, nStakeMinAge, nTimeTx);
         return false;
+    }
         //return error("CheckStakeKernelHash() : min age violation - nTimeBlockFrom=%d nStakeMinAge=%d nTimeTx=%d", nTimeBlockFrom, nStakeMinAge, nTimeTx);
 
     //grab difficulty
@@ -334,16 +347,19 @@ bool CheckStakeKernelHash(unsigned int nBits, const CBlock blockFrom, const CTra
     for (i = 0; i < (nHashDrift); i++) //iterate the hashing
     {
         //new block came in, move on
-        if (chainActive.Height() != nHeightStart)
+        if (chainActive.Height() != nHeightStart) {
+            LogPrintf("CheckStakeKernelHash(): new block came in, move on \n");
             break;
-
+        }
         //hash this iteration
         nTryTime = nTimeTx + nHashDrift - i;
         hashProofOfStake = stakeHash(nTryTime, ss, prevout.n, prevout.hash, nTimeBlockFrom);
 
         // if stake hash does not meet the target then continue to next iteration
-        if (!stakeTargetHit(hashProofOfStake, nValueIn, bnTargetPerCoinDay))
+        if (!stakeTargetHit(hashProofOfStake, nValueIn, bnTargetPerCoinDay)) {
+            //LogPrintf("CheckStakeKernelHash(): stake hash does not meet the target then continue to next iteration \n");
             continue;
+        }
 
         fSuccess = true; // if we make it this far then we have successfully created a stake hash
         nTimeTx = nTryTime;

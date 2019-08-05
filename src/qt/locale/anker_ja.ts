@@ -5731,7 +5731,7 @@ for example: alertnotify=echo %%s | mail -s &quot;Anker Alert&quot; admin@foo.co
     </message>
 </context>
 <context>
-    <name>zphrcontroldialog</name>
+    <name>zankcontroldialog</name>
     <message>
         <source>Select zAnk to Spend</source>
         <translation>送金したいzANKを選択</translation>

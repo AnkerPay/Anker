@@ -3,7 +3,7 @@
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 #include "primitives/deterministicmint.h"
-#include "zphrtracker.h"
+#include "zanktracker.h"
 #include "util.h"
 #include "sync.h"
 #include "main.h"
@@ -444,7 +444,7 @@ std::set<CMintMeta> CzANKTracker::ListMints(bool fUnusedOnly, bool fMatureOnly, 
         std::list<CDeterministicMint> listDeterministicDB = walletdb.ListDeterministicMints();
         for (auto& dMint : listDeterministicDB)
             Add(dMint);
-        LogPrint("zero", "%s: added %d dzphr from DB\n", __func__, listDeterministicDB.size());
+        LogPrint("zero", "%s: added %d dzank from DB\n", __func__, listDeterministicDB.size());
     }
 
     std::vector<CMintMeta> vOverWrite;

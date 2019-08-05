@@ -154,7 +154,7 @@ public:
         /** Height or Time Based Activations **/
         nLastPOWBlock = 500;
         nModifierUpdateBlock = 100;
-        nZerocoinStartHeight = 501;
+        nZerocoinStartHeight = 101;
 
         const char* pszTimestamp = "10 Octobar 2018";
         CMutableTransaction txNew;
@@ -209,7 +209,7 @@ public:
 
         nPoolMaxTransactions = 3;
         strSporkKey = "04e8fa0e3d22df65a5b2e5a0c1dff1ab659ab461cee07c55a04063a31f217b3a4f3b0050ebb6490d2bd486a260ab9a7998d0d8fe2eb7e3f83f6b6b517aefc34b00";
-        strObfuscationPoolDummyAddress = "ACYiHgGJJ6xGHqivmdZrYjRnhaYf6AJ2Mp";
+        strObfuscationPoolDummyAddress = "AdtK8zw9VSuN4stcwpqA4PGF3hQgSGRm2a";
 
         /** Zerocoin */
         zerocoinModulus = "25195908475657893494027183240048398571429282126204032027777137836043662020707595556264018525880784"
@@ -219,7 +219,7 @@ public:
             "8441436038339044149526344321901146575444541784240209246165157233507787077498171257724679629263863563732899121548"
             "31438167899885040445364023527381951378636564391212010397122822120720357";
 
-        nZerocoinLastOldParams = 501; // Updated to defer zerocoin v2 for further testing.
+        nZerocoinLastOldParams = 2147483646; // Updated to defer zerocoin v2 for further testing.
         nMaxZerocoinSpendsPerTransaction = 7; // Assume about 20kb each
         nMinZerocoinMintFee = 1 * CENT; //high fee required for zerocoin mints
         nMintRequiredConfirmations = 20; //the maximum amount of confirmations until accumulated in 19
@@ -261,11 +261,11 @@ public:
         nMaturity = 15;
         nMasternodeCountDrift = 4;
         nModifierUpdateBlock = 51197; //approx Mon, 17 Apr 2017 04:00:00 GMT
-        nMaxMoneyOut = 43199500 * COIN;
+        nMaxMoneyOut = 247500000 * COIN;
         nLastPOWBlock = 500;
-        nZerocoinStartHeight = 100;
+        nZerocoinStartHeight = 2147483646;
 
-        nZerocoinLastOldParams = 30;
+        nZerocoinLastOldParams = 2147483646;
 
         //! Modify the testnet genesis block so the timestamp is valid for a later start.
         genesis.nTime = 1539180001;
@@ -307,7 +307,7 @@ public:
 
         nPoolMaxTransactions = 2;
         strSporkKey = "043320ffe7c5e2d8ea82960cacf0a1a59dd5fc179c4d00bec92c469cbf337b0936a17d0b3daaa26a4ab22e2a788781be061b022a459b0212939488ac77243417bf"; 
-        strObfuscationPoolDummyAddress = "ACYiHgGJJ6xGHqivmdZrYjRnhaYf6AJ2Mp";
+        strObfuscationPoolDummyAddress = "AdtK8zw9VSuN4stcwpqA4PGF3hQgSGRm2a";
         nBudgetFeeConfirmations = 3; // Number of confirmations for the finalization fee. We have to make this very short
                                      // here because we only have a 8 block finalization window on testnet
     }
@@ -345,8 +345,8 @@ public:
         genesis.nNonce = 0;
         nMaturity = 0;
         nLastPOWBlock = 999999999; // PoS complicates Regtest because of timing issues
-        nZerocoinLastOldParams = 30;
-        nZerocoinStartHeight = 30;
+        nZerocoinLastOldParams = 2147483646;
+        nZerocoinStartHeight = 2147483646;
 /*
 
         uint256 hash;

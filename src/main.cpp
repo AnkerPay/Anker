@@ -91,7 +91,7 @@ unsigned int nBytesPerSigOp = DEFAULT_BYTES_PER_SIGOP;
 bool fAlerts = DEFAULT_ALERTS;
 
 unsigned int nStakeMinAge = 48 * 60 * 60;
-//unsigned int nStakeMinAge = 3 * 60;
+//unsigned int nStakeMinAge = 3*60;
 int64_t nReserveBalance = 0;
 
 /** Fees smaller than this (in uphr) are considered zero fee (for relaying and mining)
@@ -1590,7 +1590,7 @@ bool AcceptToMemoryPool(CTxMemPool& pool, CValidationState& state, const CTransa
                 CoinSpend spend = TxInToZerocoinSpend(txIn);
                 if (!ContextualCheckZerocoinSpend(tx, spend, chainActive.Tip(), 0))
                     return state.Invalid(error("%s: ContextualCheckZerocoinSpend failed for tx %s", __func__,
-                                               tx.GetHash().GetHex()), REJECT_INVALID, "bad-txns-invalid-zphr");
+                                               tx.GetHash().GetHex()), REJECT_INVALID, "bad-txns-invalid-zank");
             }
         } else {
             LOCK(pool.cs);
@@ -5914,6 +5914,7 @@ bool static ProcessMessage(CNode* pfrom, string strCommand, CDataStream& vRecv, 
             pfrom->PushMessage(NetMsgType::REJECT, strCommand, REJECT_DUPLICATE, string("Duplicate version message"));
             LOCK(cs_main);
             Misbehaving(pfrom->GetId(), 1);
+            LogPrintf("REJECT_DUPLICATE VERSION Message\n");
             return false;
         }
 

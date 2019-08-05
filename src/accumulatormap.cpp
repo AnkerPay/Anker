@@ -62,7 +62,7 @@ bool AccumulatorMap::Accumulate(PublicCoin pubCoin, bool fSkipValidation)
     CoinDenomination denom = pubCoin.getDenomination();
     if (denom == CoinDenomination::ZQ_ERROR)
         return false;
-
+    LogPrintf("AccumulatorMap::Accumulate(): += 65 \n");
     if (fSkipValidation)
         mapAccumulators.at(denom)->increment(pubCoin.getValue());
     else

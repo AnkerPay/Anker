@@ -14,7 +14,7 @@
 #include "sendcoinsentry.h"
 #include "walletmodel.h"
 #include "coincontrol.h"
-#include "zphrcontroldialog.h"
+#include "zankcontroldialog.h"
 #include "spork.h"
 
 #include <QClipboard>
@@ -481,7 +481,7 @@ void PrivacyDialog::sendzANK()
             walletModel->updateAddressBookLabels(address, "(no label)", "send");
     }
 
-    // Clear zphr selector in case it was used
+    // Clear zank selector in case it was used
     ZAnkControlDialog::setSelectedMints.clear();
     ui->labelzANKSelected_int->setText(QString("0"));
     ui->labelQuantitySelected_int->setText(QString("0"));
@@ -615,7 +615,7 @@ void PrivacyDialog::setBalance(const CAmount& balance, const CAmount& unconfirme
         mapImmature.insert(make_pair(denom, 0));
     }
 
-    std::vector<CMintMeta> vMints = pwalletMain->zphrTracker->GetMints(false);
+    std::vector<CMintMeta> vMints = pwalletMain->zankTracker->GetMints(false);
     map<libzerocoin::CoinDenomination, int> mapMaturityHeights = GetMintMaturityHeight();
     for (CMintMeta& meta : vMints){
         // All denominations

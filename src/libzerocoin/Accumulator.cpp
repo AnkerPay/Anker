@@ -83,6 +83,7 @@ void Accumulator::setValue(CBigNum bnValue) {
 }
 
 Accumulator& Accumulator::operator += (const PublicCoin& c) {
+    LogPrintf("Accumulator(): += 86 \n");
 	this->accumulate(c);
 	return *this;
 }
@@ -122,8 +123,8 @@ const CBigNum& AccumulatorWitness::getValue() const {
 }
 
 bool AccumulatorWitness::VerifyWitness(const Accumulator& a, const PublicCoin &publicCoin) const {
-	Accumulator temp(witness);
-	temp += element;
+	Accumulator temp(this->witness);
+	temp += this->element;
 	if (!(temp == a)) {
 		LogPrintf("Accumulator does not verify.\n");
 	}

@@ -59,12 +59,12 @@ struct CBlockTemplate;
 struct CNodeStateStats;
 
 /** Default for -blockmaxsize and -blockminsize, which control the range of sizes the mining code will create **/
-static const unsigned int DEFAULT_BLOCK_MAX_SIZE = 2250000;
+static const unsigned int DEFAULT_BLOCK_MAX_SIZE = 9050000;
 static const unsigned int DEFAULT_BLOCK_MIN_SIZE = 0;
 /** Default for -blockmaxcost, which control the range of block costs the mining code will create **/
 static const unsigned int DEFAULT_BLOCK_MAX_COST = 3000000;
 /** Default for -blockprioritysize, maximum space for zero/low-fee transactions **/
-static const unsigned int DEFAULT_BLOCK_PRIORITY_SIZE = 50000;
+static const unsigned int DEFAULT_BLOCK_PRIORITY_SIZE = 90000;
 /** Default for accepting alerts from the P2P network. */
 static const bool DEFAULT_ALERTS = true;
 /** The maximum size for transactions we're willing to relay/mine */
@@ -78,11 +78,11 @@ static const unsigned int MAX_P2SH_SIGOPS = 15;
 /** The maximum number of sigops we're willing to relay/mine in a single tx */
 static const int64_t MAX_TX_SIGOPS_COST = MAX_BLOCK_SIGOPS_COST / 5;
 /** The maximum allowed size for a serialized block, in bytes (only for buffer size limits) */
-static const unsigned int MAX_BLOCK_SERIALIZED_SIZE = 4000000;
+static const unsigned int MAX_BLOCK_SERIALIZED_SIZE = 10000000;
 /** The maximum allowed cost for a block, see BIP 141 (network rule) */
 static const int64_t MAX_BLOCK_COST = 4000000;
 /** The maximum allowed size for a block excluding witness data, in bytes (network rule) */
-static const unsigned int MAX_BLOCK_BASE_SIZE = 3000000;
+static const unsigned int MAX_BLOCK_BASE_SIZE = 10000000;
 /** Default for -maxorphantx, maximum number of orphan transactions kept in memory */
 static const unsigned int DEFAULT_MAX_ORPHAN_TRANSACTIONS = 100;
 /** The maximum size of a blk?????.dat file (since 0.8) */
