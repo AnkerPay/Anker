@@ -4,6 +4,7 @@ Anker Core integration/staging repository
 =====================================
 
 https://ankerid.com/
+
 https://ankerpay.com/
 
 https://explorer.ankerid.com
@@ -30,6 +31,6 @@ https://bitcointalk.org/index.php?topic=5171545.0
 <tr><td>Algo</td><td>Quark</td></tr>
 <tr><td>Block Time</td><td>30 Seconds</td></tr>
 <tr><td>Difficulty Retargeting</td><td>Every Block</td></tr>
-<tr><td>Max Coin Supply (PoS Phase)</td><td>247,500,000 ANK</td></tr>
+<tr><td>Max Coin Supply</td><td>247,500,000 ANK</td></tr>
 </table>
 
