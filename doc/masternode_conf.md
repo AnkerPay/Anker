@@ -126,7 +126,7 @@ You should see something like:
     {
     “txhash” : “334545645643534534324238908f36ff4456454dfffff51311”,
     “outputidx” : 0,
-    “netaddr” : “45.11.111.111:51472”,
+    “netaddr” : “45.11.111.111:12365”,
     “addr” : “D6fujc45645645445645R7TiCwexx1LA1”,
     “status” : 4,
     “message” : “Masternode successfully started”
