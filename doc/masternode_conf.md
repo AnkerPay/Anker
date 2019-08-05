@@ -133,7 +133,6 @@ You should see something like:
 
 Congratulations! You have successfully created your masternode!
 
-Now the masternode setup is complete, you are safe to remove “enablezeromint=0” from the anker.conf file of the control wallet.
 
 Multi masternode config
 =======================
