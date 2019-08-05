@@ -17,7 +17,6 @@ First the basic requirements:
 The basic reasoning for these requirements is that, you get to keep your ANK in your local wallet and host your masternode remotely, securely.
 ## Configuration ##
 
-Note: The auto zANK minter should be disabled during this setup to prevent autominting of your masternode collateral. BEFORE unlocking your wallet, you can disable autominting in the control wallet option menu.
 
 1) Using the control wallet, enter the debug console (Tools > Debug console) and type the following command:
 ```
