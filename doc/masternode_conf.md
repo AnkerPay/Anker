@@ -55,7 +55,7 @@ Example: MN1 31.14.135.27:12365 892WPpkqbr7sr6Si4fdsfssjjapuFzAXwETCrpPJubnrmU6a
 Substitute it with your own values and without the “<>”s
 VPS Remote wallet install
 
-7) Install the latest version of the ANK wallet onto your masternode. The lastest version can be found here: https://github.com/ankerid/Anker
+7) Install the latest version of the ANK wallet onto your masternode. The lastest version can be found here: https://github.com/AnkerPay/Anker
 
     Note: If this is the first time running the wallet in the VPS, you’ll need to attempt to start the wallet 
     ```
