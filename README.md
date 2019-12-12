@@ -7,7 +7,7 @@ https://ankerpay.com/
 
 https://ankeratm.com/
 
-https://explorer.ankerid.com
+https://explorer.ankerpay.com
 
 Anker is a cutting edge cryptocurrency, with many features not available in most other cryptocurrencies.
 - Alias: Use your email to send to anyone. Each email address is linked to an ANK address.
