@@ -31,12 +31,12 @@ The basic reasoning for these requirements is that, you get to keep your ANK in 
 ![Fig4](img/start_ank_node_save.png)
 4) Install the latest version of the ANK wallet onto your ankernode. The lastest version can be found here: https://github.com/AnkerPay/Anker-Docker-Core
 
-    Note: Before run your masternode on VPS copy your anker.conf file to Anker-Docker-Core directory, or open the anker.conf by typing and paste your wallet generated configuration from clipboard
+    Note: Before run your AnkerNode on VPS copy your anker.conf file to Anker-Docker-Core directory, or open the anker.conf by typing and paste your wallet generated configuration from clipboard
 
-## Start your masternode ##
+## Start your AnkerNode ##
 
 7) Now, you need to finally start these things in this order
 
 – From the Control wallet AnkerNodes page select your AnkerNode and press "Start alias" button
 
-Congratulations! You have successfully created your masternode!
+Congratulations! You have successfully created your AnkerNode!
