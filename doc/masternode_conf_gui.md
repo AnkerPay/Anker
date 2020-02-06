@@ -18,37 +18,20 @@ The basic reasoning for these requirements is that, you get to keep your ANK in 
 
 ## Configuration ##
 
-1) Using the wallet, open "Masternodes" page and press "New Masternode" button:
-2) enter the your unique public ip address for your VPS, uncheck "Local Masternode with hot wallet" checkbox and click ok:
+1) Using the wallet, open "AnkerNodes" page and press "New AnkerNode" button:
+2) enter the your unique public ip address for your VPS and port 12365, select "non Local AnkerNode with hot wallet":
 
 ![Fig1](img/mn2.png)
 
-3) Click on "details" button and copy all text to clipboard
-4) Install the latest version of the ANK wallet onto your masternode. The lastest version can be found here: https://github.com/AnkerPay/Anker
+3) Save generated config file on your Desktop folder
+4) Install the latest version of the ANK wallet onto your ankernode. The lastest version can be found here: https://github.com/AnkerPay/Anker-Docker-Core
 
-    Note: If this is the first time running the wallet in the VPS, you’ll need to attempt to start the wallet 
-    ```
-    ./ankerd
-    ```
-     this will place the config files in your ~/.anker data directory
-    ```
-    press CTRL+C
-    ```
-    to exit / stop the wallet
-
-5) Now on the masternodes, find the ANK data directory here.(Linux: ~/.anker)
-    ```
-    cd ~/.anker
-    ```
-6) Open the anker.conf by typing and paste your wallet generated configuration from clipboard
+    Note: Before run your masternode on VPS copy your anker.conf file to Anker-Docker-Core directory, or open the anker.conf by typing and paste your wallet generated configuration from clipboard
 
 ## Start your masternode ##
 
 7) Now, you need to finally start these things in this order
-– Start the daemon client in the VPS. First go back to your installed wallet directory, 
-```
-./ankerd
-```
-– From the Control wallet maternodes page press "Start all" button
+
+– From the Control wallet AnkerNodes page select your AnkerNode and press "Start alias" button
 
 Congratulations! You have successfully created your masternode!
