@@ -19,11 +19,16 @@ The basic reasoning for these requirements is that, you get to keep your ANK in 
 ## Configuration ##
 
 1) Using the wallet, open "AnkerNodes" page and press "New AnkerNode" button:
+
+![Fig1](img/start_ank_node.png)
+
 2) enter the your unique public ip address for your VPS and port 12365, select "non Local AnkerNode with hot wallet":
 
-![Fig1](img/mn2.png)
+![Fig2](img/start_ank_node_local.png)
+![Fig3](img/start_ank_node_ip.png)
 
 3) Save generated config file on your Desktop folder
+![Fig4](img/start_ank_node_save.png)
 4) Install the latest version of the ANK wallet onto your ankernode. The lastest version can be found here: https://github.com/AnkerPay/Anker-Docker-Core
 
     Note: Before run your masternode on VPS copy your anker.conf file to Anker-Docker-Core directory, or open the anker.conf by typing and paste your wallet generated configuration from clipboard
