@@ -22,7 +22,7 @@ The basic reasoning for these requirements is that, you get to keep your ANK in 
 
 ![Fig1](img/start_ank_node.png)
 
-2) select "non Local AnkerNode with hot wallet", enter the your unique public ip address for your VPS and port 12365:
+2) Select "non Local AnkerNode with hot wallet", enter the your unique public ip address for your VPS and port 12365:
 
 ![Fig2](img/start_ank_node_local.png)
 ![Fig3](img/start_ank_node_ip.png)
