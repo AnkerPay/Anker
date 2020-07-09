@@ -53,7 +53,7 @@ OutputType g_address_type = OUTPUT_TYPE_NONE;
 OutputType g_change_type = OUTPUT_TYPE_NONE;
 
 /**
- * Fees smaller than this (in uphr) are considered zero fee (for transaction creation)
+ * Fees smaller than this (in uank) are considered zero fee (for transaction creation)
  * We are ~100 times smaller then bitcoin now (2015-06-23), set minTxFee 10 times higher
  * so it's still 10 times lower comparing to bitcoin.
  * Override with -mintxfee
@@ -2901,6 +2901,7 @@ bool CWallet::CreateCoinStake(const CKeyStore& keystore, unsigned int nBits, int
     // presstab HyperStake - Initialize as static and don't update the set on every run of CreateCoinStake() in order to lighten resource use
     static std::set<pair<const CWalletTx*, unsigned int> > setStakeCoins;
     static int nLastStakeSetUpdate = 0;
+
     if (GetTime() - nLastStakeSetUpdate > nStakeSetUpdateTime) {
         setStakeCoins.clear();
         if (!SelectStakeCoins(setStakeCoins, nBalance - nReserveBalance))
@@ -2908,6 +2909,7 @@ bool CWallet::CreateCoinStake(const CKeyStore& keystore, unsigned int nBits, int
 
         nLastStakeSetUpdate = GetTime();
     }
+
     if (setStakeCoins.empty()) {
         LogPrintf("CreateCoinStake() stake coins empty \n");
         return false;
@@ -2921,7 +2923,7 @@ bool CWallet::CreateCoinStake(const CKeyStore& keystore, unsigned int nBits, int
     //prevent staking a time that won't be accepted
     if (GetAdjustedTime() <= chainActive.Tip()->nTime)
         MilliSleep(10000);
-    LogPrintf("CreateCoinStake : add stake coins\n");
+
     BOOST_FOREACH (PAIRTYPE(const CWalletTx*, unsigned int) pcoin, setStakeCoins) {
         //make sure that enough time has elapsed between
         CBlockIndex* pindex = NULL;
@@ -2933,7 +2935,7 @@ bool CWallet::CreateCoinStake(const CKeyStore& keystore, unsigned int nBits, int
                 LogPrintf("CreateCoinStake() failed to find block index \n");
             continue;
         }
-        LogPrintf("CreateCoinStake() trying to find block index \n");
+
         // Read block header
         CBlockHeader block = pindex->GetBlockHeader();
 
@@ -2951,7 +2953,8 @@ bool CWallet::CreateCoinStake(const CKeyStore& keystore, unsigned int nBits, int
             }
 
             // Found a kernel
-            LogPrintf("CreateCoinStake : kernel found\n");
+            if (fDebug && GetBoolArg("-printcoinstake", false))
+                LogPrintf("CreateCoinStake : kernel found\n");
 
             vector<valtype> vSolutions;
             txnouttype whichType;
@@ -2961,10 +2964,10 @@ bool CWallet::CreateCoinStake(const CKeyStore& keystore, unsigned int nBits, int
                 LogPrintf("CreateCoinStake : failed to parse kernel\n");
                 break;
             }
-            if (fDebug)
+            if (fDebug && GetBoolArg("-printcoinstake", false))
                 LogPrintf("CreateCoinStake : parsed kernel type=%d\n", whichType);
             if (whichType != TX_PUBKEY && whichType != TX_PUBKEYHASH) {
-                if (fDebug)
+                if (fDebug && GetBoolArg("-printcoinstake", false))
                     LogPrintf("CreateCoinStake : no support for kernel type=%d\n", whichType);
                 break; // only support pay to public key and pay to address
             }
@@ -2973,7 +2976,7 @@ bool CWallet::CreateCoinStake(const CKeyStore& keystore, unsigned int nBits, int
                 //convert to pay to public key type
                 CKey key;
                 if (!keystore.GetKey(uint160(vSolutions[0]), key)) {
-                    if (fDebug)
+                    if (fDebug && GetBoolArg("-printcoinstake", false))
                         LogPrintf("CreateCoinStake : failed to get key for kernel type=%d\n", whichType);
                     break; // unable to find corresponding public key
                 }
@@ -2995,7 +2998,7 @@ bool CWallet::CreateCoinStake(const CKeyStore& keystore, unsigned int nBits, int
             if (nTotalSize / 2 > nStakeSplitThreshold * COIN)
                 txNew.vout.push_back(CTxOut(0, scriptPubKeyOut)); //split stake
 
-            if (fDebug)
+            if (fDebug && GetBoolArg("-printcoinstake", false))
                 LogPrintf("CreateCoinStake : added kernel type=%d\n", whichType);
             fKernelFound = true;
             break;
@@ -3003,15 +3006,22 @@ bool CWallet::CreateCoinStake(const CKeyStore& keystore, unsigned int nBits, int
         if (fKernelFound)
             break; // if kernel is found stop searching
     }
-    if (nCredit == 0 || nCredit > nBalance - nReserveBalance) {
-        LogPrintf("CreateCoinStake credit or balance not good: credit %d balance %d reserved %d\n",nCredit,nBalance,nReserveBalance);
+    if (nCredit == 0 || nCredit > nBalance - nReserveBalance)
         return false;
-    }
 
     // Calculate reward
     CAmount nReward;
     const CBlockIndex* pIndex0 = chainActive.Tip();
-    nReward = GetBlockValue(pIndex0->nHeight);
+    LogPrint("masternode","GetPayee: block %d\n", pIndex0->nHeight);
+    CScript payee;
+    bool fPayeeFound = false;
+    if (GetPayee(pIndex0->nHeight, payee)) {
+        nReward = GetBlockValue(pIndex0->nHeight, &payee);
+        fPayeeFound = true;
+    } else {
+        nReward = GetBlockValue(pIndex0->nHeight);
+    }
+    LogPrint("masternode","GetBlockValue: block %d\n", pIndex0->nHeight);
     nCredit += nReward;
 
     CAmount nMinFee = 0;
@@ -3025,10 +3035,8 @@ bool CWallet::CreateCoinStake(const CKeyStore& keystore, unsigned int nBits, int
 
         // Limit size
         unsigned int nBytes = GetTransactionCost(txNew);
-        if (nBytes >= MAX_STANDARD_TX_COST) {
-            LogPrintf("CreateCoinStake exceeded coinstake size limit \n");
+        if (nBytes >= MAX_STANDARD_TX_COST)
             return error("CreateCoinStake : exceeded coinstake size limit");
-        }
 
         CAmount nFeeNeeded = GetMinimumFee(nBytes, nTxConfirmTarget, mempool);
 
@@ -3044,7 +3052,11 @@ bool CWallet::CreateCoinStake(const CKeyStore& keystore, unsigned int nBits, int
     }
 
     //Masternode payment
-    FillBlockPayee(txNew, nMinFee, true);
+    if (fPayeeFound) {
+        FillBlockPayee(txNew, nMinFee, true, &payee);
+    } else {
+        FillBlockPayee(txNew, nMinFee, true);
+    }
     
     if (nFees > 0) {
         txNew.vout[1].nValue += nFees;

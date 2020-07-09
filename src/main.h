@@ -243,12 +243,13 @@ bool DisconnectBlocksAndReprocess(int blocks);
 
 // ***TODO***
 double ConvertBitsToDouble(unsigned int nBits);
-int64_t GetMasternodePayment(int nHeight, int64_t blockValue, int nMasternodeCount = 0);
+int64_t GetMasternodePayment(int nHeight, int64_t blockValue, int nMasternodeCount = 0, CScript *payee = NULL);
+bool GetPayee(int nHeight, CScript& payee);
 int64_t GetColdstakingPayment(int nHeight);
 unsigned int GetNextWorkRequired(const CBlockIndex* pindexLast, const CBlockHeader* pblock, bool fProofOfStake);
 
 bool ActivateBestChain(CValidationState& state, CBlock* pblock = NULL, bool fAlreadyChecked = false);
-CAmount GetBlockValue(int nHeight);
+CAmount GetBlockValue(int nHeight, CScript *payee = NULL);
 CAmount GetFullBlockValue(int nHeight);
 
 /** Create a new block index entry for a given block hash */

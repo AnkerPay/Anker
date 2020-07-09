@@ -2210,7 +2210,7 @@ int64_t GetFullBlockValue(int nHeight)
     }
 }
 
-int64_t GetBlockValue(int nHeight)
+int64_t GetBlockValue(int nHeight, CScript* payee)
 {
     double fStakingPercentage = 0.1;
     if (nHeight > 9860800) {
@@ -2221,18 +2221,43 @@ int64_t GetBlockValue(int nHeight)
     if (nHeight <= Params().LAST_POW_BLOCK()) {
         return FullBlockValue;
     } else {
-        BlockValue = fStakingPercentage * FullBlockValue + GetMasternodePayment(nHeight, FullBlockValue) + GetColdstakingPayment(nHeight);
+        BlockValue = fStakingPercentage * FullBlockValue + GetMasternodePayment(nHeight, FullBlockValue, 0, payee) + GetColdstakingPayment(nHeight);
     }
     return BlockValue;
 }
 
-
-int64_t GetMasternodePayment(int nHeight, int64_t blockValue, int nMasternodeCount)
+bool GetPayee(int nHeight, CScript& payee)
+{
+    if (!masternodePayments.GetBlockPayee(nHeight + 1, payee)) {
+        CMasternode* currentNode = mnodeman.GetCurrentMasterNode(1);
+        if (currentNode) {
+            payee = GetScriptForDestination(currentNode->pubKeyCollateralAddress.GetID());
+            return true;
+        }
+    } else {
+        return true;
+    }
+    return false;
+}
+int64_t GetMasternodePayment(int nHeight, int64_t blockValue, int nMasternodeCount, CScript* payee)
 {
     int nMasternodeActiveHeight = 0;
-    CMasternode* currentNode = mnodeman.GetCurrentMasterNode(1);
-    if (currentNode) {
-        nMasternodeActiveHeight = (int)((currentNode->lastPing.sigTime - currentNode->sigTime)/60) * 2;
+    CScript cpayee;
+    if (payee) {
+        CMasternode* currentNode = mnodeman.Find(*payee);
+        if (currentNode) {
+            nMasternodeActiveHeight = (int)((GetTime() - currentNode->sigTime)/60) * 2;
+        }
+    } else  if (!masternodePayments.GetBlockPayee(nHeight + 1, cpayee)) {
+        CMasternode* currentNode = mnodeman.GetCurrentMasterNode(1);
+        if (currentNode) {
+            nMasternodeActiveHeight = (int)((GetTime() - currentNode->sigTime)/60) * 2;
+        }
+    } else {
+        CMasternode* currentNode = mnodeman.Find(cpayee);
+        if (currentNode) {
+            nMasternodeActiveHeight = (int)((GetTime() - currentNode->sigTime)/60) * 2;
+        }
     }
     int threeMonthHeight = 2 * 60 * 24 * 30 * 3;
     // for test set to 1 day
@@ -2248,6 +2273,7 @@ int64_t GetMasternodePayment(int nHeight, int64_t blockValue, int nMasternodeCou
     CAmount FullBlockValue = GetFullBlockValue(nHeight);
     CAmount ret = FullBlockValue * fSubsidyAdjustmentPercentage;
     ret = ret * (1 + (0.05 * nMnActiveCount));
+    LogPrint("masternode","Masternode payment of %s block %d\n", FormatMoney(ret).c_str(), nHeight);
     return ret;
 }
 
@@ -5914,7 +5940,6 @@ bool static ProcessMessage(CNode* pfrom, string strCommand, CDataStream& vRecv, 
             pfrom->PushMessage(NetMsgType::REJECT, strCommand, REJECT_DUPLICATE, string("Duplicate version message"));
             LOCK(cs_main);
             Misbehaving(pfrom->GetId(), 1);
-            LogPrintf("REJECT_DUPLICATE VERSION Message\n");
             return false;
         }
 
