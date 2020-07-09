@@ -15,12 +15,24 @@
 #include "walletmodel.h"
 #include "wallet.h"
 
+
 #include <QAction>
 #include <QCursor>
 #include <QItemSelection>
 #include <QMessageBox>
 #include <QScrollBar>
 #include <QTextDocument>
+#include <QPixmap>
+
+#if defined(HAVE_CONFIG_H)
+#include "config/anker-config.h" /* for USE_QRCODE */
+#endif
+
+#ifdef USE_QRCODE
+#include <qrencode.h>
+#endif
+
+extern CWallet* pwalletMain;
 
 ReceiveCoinsDialog::ReceiveCoinsDialog(QWidget* parent) : QDialog(parent),
                                                           ui(new Ui::ReceiveCoinsDialog),
@@ -62,6 +74,32 @@ ReceiveCoinsDialog::ReceiveCoinsDialog(QWidget* parent) : QDialog(parent),
     connect(copyAmountAction, SIGNAL(triggered()), this, SLOT(copyAmount()));
 
     connect(ui->clearButton, SIGNAL(clicked()), this, SLOT(clear()));
+#ifdef USE_QRCODE
+    QString uri = QString::fromStdString("anker:" + EncodeDestination(pwalletMain->vchDefaultKey.GetID()) );
+    ui->mainlblQRCode->setText("");
+    QRcode* code = QRcode_encodeString(uri.toUtf8().constData(), 0, QR_ECLEVEL_L, QR_MODE_8, 1);
+    if (!code) {
+        ui->mainlblQRCode->setText(tr("Error encoding URI into QR Code."));
+        return;
+    }
+    QImage myImage = QImage(code->width + 8, code->width + 8, QImage::Format_RGB32);
+    myImage.fill(0xffffff);
+    unsigned char* p = code->data;
+    for (int y = 0; y < code->width; y++) {
+        for (int x = 0; x < code->width; x++) {
+            myImage.setPixel(x + 4, y + 4, ((*p & 1) ? 0x0 : 0xffffff));
+            p++;
+        }
+    }
+    QRcode_free(code);
+
+    ui->mainlblQRCode->setPixmap(QPixmap::fromImage(myImage).scaled(300, 300));
+#endif
+    QString uriAddress = QString::fromStdString(EncodeDestination(pwalletMain->vchDefaultKey.GetID()) );
+//    for (int i = 4; i <= uriAddress.size(); i+=4+1)
+//        uriAddress.insert(i, ' ');
+    ui->AddressQrLabel->setText(uriAddress);
+    ui->AddressQrLabel->setTextInteractionFlags(Qt::TextSelectableByMouse);
 }
 
 void ReceiveCoinsDialog::setModel(WalletModel* model)

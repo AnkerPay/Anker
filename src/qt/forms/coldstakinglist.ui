@@ -101,7 +101,7 @@
                     </font>
                    </property>
                    <property name="text">
-                    <string>COLD STAKING</string>
+                    <string>AnkerSavings</string>
                    </property>
                   </widget>
                  </item>
@@ -129,24 +129,10 @@
                  <number>1</number>
                 </property>
                 <item>
-                 <layout class="QHBoxLayout" name="horizontalLayout_note">
-                  <property name="bottomMargin">
-                   <number>0</number>
-                  </property>
-                  <item>
-                   <widget class="QLabel" name="updateNote">
-                    <property name="text">
-                     <string/>
-                    </property>
-                   </widget>
-                  </item>
-                 </layout>
-                </item>
-                <item>
                  <widget class="QTableWidget" name="tableWidgetMyColdstaking">
                   <property name="minimumSize">
                    <size>
-                    <width>695</width>
+                    <width>580</width>
                     <height>0</height>
                    </size>
                   </property>
@@ -245,7 +231,7 @@
                   <item>
                    <widget class="QPushButton" name="newcoldstaking">
                     <property name="text">
-                     <string>New Cold Sataking</string>
+                     <string>New AnkerSavings</string>
                     </property>
                    </widget>
                   </item>

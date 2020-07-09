@@ -474,7 +474,6 @@ void BitcoinApplication::initializeResult(int retval)
         } else {
             window->show();
         }
-        emit splashFinished(window);
 
 #ifdef ENABLE_WALLET
         // Now that initialization/startup is done, process any command-line
@@ -487,6 +486,7 @@ void BitcoinApplication::initializeResult(int retval)
             window, SLOT(message(QString, QString, unsigned int)));
         QTimer::singleShot(100, paymentServer, SLOT(uiReady()));
 #endif
+        emit splashFinished(window);
     } else {
         quit(); // Exit main loop
     }
@@ -533,10 +533,10 @@ int main(int argc, char* argv[])
     Q_INIT_RESOURCE(anker_locale);
     Q_INIT_RESOURCE(anker);
 
-    BitcoinApplication app(argc, argv);
 #if QT_VERSION > 0x050100
     // Generate high-dpi pixmaps
     QApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
+    QCoreApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
 #endif
 #if QT_VERSION >= 0x050600
     QGuiApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
@@ -544,6 +544,10 @@ int main(int argc, char* argv[])
 #ifdef Q_OS_MAC
     QApplication::setAttribute(Qt::AA_DontShowIconsInMenus);
 #endif
+
+    qputenv("QT_AUTO_SCREEN_SCALE_FACTOR", "1");
+    BitcoinApplication app(argc, argv);
+
 
     // Register meta types used for QMetaObject::invokeMethod
     qRegisterMetaType<bool*>();

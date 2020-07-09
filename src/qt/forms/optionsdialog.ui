@@ -344,10 +344,10 @@
           <item>
            <widget class="QCheckBox" name="showMasternodesTab">
             <property name="toolTip">
-             <string>Show additional tab listing all your masternodes in first sub-tab&lt;br/&gt;and all masternodes on the network in second sub-tab.</string>
+             <string>Show additional tab listing all your AnkerNodes in first sub-tab&lt;br/&gt;and all AnkerNodes on the network in second sub-tab.</string>
             </property>
             <property name="text">
-             <string>Show Masternodes Tab</string>
+             <string>Show AnkerNodes Tab</string>
             </property>
            </widget>
           </item>
