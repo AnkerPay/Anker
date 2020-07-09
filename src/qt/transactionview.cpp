@@ -137,6 +137,17 @@ TransactionView::TransactionView(QWidget* parent) : QWidget(parent), model(0), t
     vlayout->addWidget(createDateRangeWidget());
     vlayout->addWidget(view);
     vlayout->setSpacing(0);
+    
+    
+    QWidget* vlayoutWidget = new QWidget(this);
+    vlayoutWidget->setObjectName("transactionView"); // Name for CSS addressing
+    vlayoutWidget->setLayout(vlayout);
+
+    QVBoxLayout* endlayout = new QVBoxLayout(this);
+    endlayout->addWidget(vlayoutWidget);
+    endlayout->setSpacing(0);
+
+        
     int width = view->verticalScrollBar()->sizeHint().width();
 // Cover scroll bar width with spacing
 #ifdef Q_OS_MAC

@@ -496,7 +496,7 @@
                       <number>0</number>
                      </property>
                      <item>
-                      <widget class="QPushButton" name="pushButtonZAnkControl">
+                      <widget class="QPushButton" name="pushButtonzANKControl">
                        <property name="minimumSize">
                         <size>
                          <width>140</width>

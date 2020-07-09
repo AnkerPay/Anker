@@ -95,6 +95,12 @@ BitcoinGUI::BitcoinGUI(const NetworkStyle* networkStyle, QWidget* parent) : QMai
                                                                             historyAction(0),
                                                                             masternodeAction(0),
                                                                             stakingAction(0),
+                                                                            toverviewAction(0),
+                                                                            thistoryAction(0),
+                                                                            tmasternodeAction(0),
+                                                                            tstakingAction(0),
+                                                                            tsendCoinsAction(0),
+                                                                            treceiveCoinsAction(0),
                                                                             quitAction(0),
                                                                             sendCoinsAction(0),
                                                                             usedSendingAddressesAction(0),
@@ -128,8 +134,8 @@ BitcoinGUI::BitcoinGUI(const NetworkStyle* networkStyle, QWidget* parent) : QMai
 {
     /* Open CSS when configured */
     this->setStyleSheet(GUIUtil::loadStyleSheet());
-    this->setMaximumSize(1920, 1080);
-    this->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    //this->setMaximumSize(1920, 1080);
+    //this->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     GUIUtil::restoreWindowGeometry("nWindow", QSize(850, 550), this);
 
     QString windowTitle = tr("Anker Core") + " - ";
@@ -288,8 +294,9 @@ BitcoinGUI::~BitcoinGUI()
 void BitcoinGUI::createActions(const NetworkStyle* networkStyle)
 {
     QActionGroup* tabGroup = new QActionGroup(this);
+    QActionGroup* ttabGroup = new QActionGroup(this);
 
-    overviewAction = new QAction(QIcon(":/icons/overview"), tr("&Overview"), this);
+    overviewAction = new QAction(QIcon(":/icons/toverview"), tr("&Overview"), this);
     overviewAction->setStatusTip(tr("Show general overview of wallet"));
     overviewAction->setToolTip(overviewAction->statusTip());
     overviewAction->setCheckable(true);
@@ -301,7 +308,14 @@ void BitcoinGUI::createActions(const NetworkStyle* networkStyle)
 #endif
     tabGroup->addAction(overviewAction);
 
-    sendCoinsAction = new QAction(QIcon(":/icons/send"), tr("&Send"), this);
+    toverviewAction = new QAction(QIcon(":/icons/toverview"), tr("&OVERVIEW"), this);
+    toverviewAction->setStatusTip(tr("Show general overview of wallet"));
+    toverviewAction->setToolTip(toverviewAction->statusTip());
+    toverviewAction->setCheckable(true);
+    toverviewAction->setObjectName("toverviewAction"); // Name for CSS addressing
+    ttabGroup->addAction(toverviewAction);
+    
+    sendCoinsAction = new QAction(QIcon(":/icons/tsend"), tr("&Send"), this);
     sendCoinsAction->setStatusTip(tr("Send coins to a Anker address"));
     sendCoinsAction->setToolTip(sendCoinsAction->statusTip());
     sendCoinsAction->setCheckable(true);
@@ -313,7 +327,15 @@ void BitcoinGUI::createActions(const NetworkStyle* networkStyle)
 #endif
     tabGroup->addAction(sendCoinsAction);
 
-    receiveCoinsAction = new QAction(QIcon(":/icons/receiving_addresses"), tr("&Receive"), this);
+    tsendCoinsAction = new QAction(QIcon(":/icons/tsend"), tr("&SEND"), this);
+    tsendCoinsAction->setStatusTip(tr("Send coins to a Anker address"));
+    tsendCoinsAction->setToolTip(tsendCoinsAction->statusTip());
+    tsendCoinsAction->setCheckable(true);
+    tsendCoinsAction->setObjectName("tsendCoinsAction"); // Name for CSS addressing
+    ttabGroup->addAction(tsendCoinsAction);
+
+    
+    receiveCoinsAction = new QAction(QIcon(":/icons/treceive"), tr("&Receive"), this);
     receiveCoinsAction->setStatusTip(tr("Request payments (generates QR codes and anker: URIs)"));
     receiveCoinsAction->setToolTip(receiveCoinsAction->statusTip());
     receiveCoinsAction->setCheckable(true);
@@ -325,7 +347,15 @@ void BitcoinGUI::createActions(const NetworkStyle* networkStyle)
 #endif
     tabGroup->addAction(receiveCoinsAction);
 
-    historyAction = new QAction(QIcon(":/icons/history"), tr("&Transactions"), this);
+    treceiveCoinsAction = new QAction(QIcon(":/icons/treceive"), tr("&RECEIVE"), this);
+    treceiveCoinsAction->setStatusTip(tr("Request payments (generates QR codes and anker: URIs)"));
+    treceiveCoinsAction->setToolTip(treceiveCoinsAction->statusTip());
+    treceiveCoinsAction->setCheckable(true);
+    treceiveCoinsAction->setObjectName("treceiveCoinsAction"); // Name for CSS addressing
+    ttabGroup->addAction(treceiveCoinsAction);
+
+    
+    historyAction = new QAction(QIcon(":/icons/thistory"), tr("&Transactions"), this);
     historyAction->setStatusTip(tr("Browse transaction history"));
     historyAction->setToolTip(historyAction->statusTip());
     historyAction->setCheckable(true);
@@ -336,7 +366,15 @@ void BitcoinGUI::createActions(const NetworkStyle* networkStyle)
     historyAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_4));
 #endif
     tabGroup->addAction(historyAction);
+    
+    thistoryAction = new QAction(QIcon(":/icons/thistory"), tr("&TRANSACTIONS"), this);
+    thistoryAction->setStatusTip(tr("Browse transaction history"));
+    thistoryAction->setToolTip(thistoryAction->statusTip());
+    thistoryAction->setCheckable(true);
+    thistoryAction->setObjectName("thistoryAction"); // Name for CSS addressing
+    ttabGroup->addAction(thistoryAction);
 
+    
     privacyAction = new QAction(QIcon(":/icons/privacy"), tr("&Privacy"), this);
     privacyAction->setStatusTip(tr("Privacy Actions for zANK"));
     privacyAction->setToolTip(privacyAction->statusTip());
@@ -353,8 +391,8 @@ void BitcoinGUI::createActions(const NetworkStyle* networkStyle)
 
     QSettings settings;
     if (settings.value("fShowMasternodesTab").toBool()) {
-        masternodeAction = new QAction(QIcon(":/icons/masternodes"), tr("&Masternodes"), this);
-        masternodeAction->setStatusTip(tr("Browse masternodes"));
+        masternodeAction = new QAction(QIcon(":/icons/tmasternodes"), tr("&AnkerNodes"), this);
+        masternodeAction->setStatusTip(tr("Browse AnkerNodes"));
         masternodeAction->setToolTip(masternodeAction->statusTip());
         masternodeAction->setCheckable(true);
         masternodeAction->setObjectName("masternodeAction"); // Name for CSS addressing
@@ -364,17 +402,37 @@ void BitcoinGUI::createActions(const NetworkStyle* networkStyle)
         masternodeAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_6));
 #endif
         tabGroup->addAction(masternodeAction);
+
+        tmasternodeAction = new QAction(QIcon(":/icons/tmasternodes"), tr("&ANKERNODES"), this);
+        tmasternodeAction->setStatusTip(tr("Browse AnkerNodes"));
+        tmasternodeAction->setToolTip(tmasternodeAction->statusTip());
+        tmasternodeAction->setCheckable(true);
+        tmasternodeAction->setObjectName("tmasternodeAction"); // Name for CSS addressing
+        ttabGroup->addAction(tmasternodeAction);
+
         connect(masternodeAction, SIGNAL(triggered()), this, SLOT(showNormalIfMinimized()));
         connect(masternodeAction, SIGNAL(triggered()), this, SLOT(gotoMasternodePage()));
+        connect(tmasternodeAction, SIGNAL(triggered()), this, SLOT(showNormalIfMinimized()));
+        connect(tmasternodeAction, SIGNAL(triggered()), this, SLOT(gotoMasternodePage()));
     }
-    stakingAction = new QAction(QIcon(":/icons/staking"), tr("Cold Staking"), this);
-    stakingAction->setStatusTip(tr("Cold Staking Actions"));
+    stakingAction = new QAction(QIcon(":/icons/tstaking"), tr("AnkerSavings"), this);
+    stakingAction->setStatusTip(tr("AnkerSavings Actions"));
     stakingAction->setToolTip(stakingAction->statusTip());
     stakingAction->setCheckable(true);
     stakingAction->setObjectName("stakingAction"); // Name for CSS addressing
     tabGroup->addAction(stakingAction);
+
+    tstakingAction = new QAction(QIcon(":/icons/tstaking"), tr("ANKERSAVINGS"), this);
+    tstakingAction->setStatusTip(tr("AnkerSavings Actions"));
+    tstakingAction->setToolTip(tstakingAction->statusTip());
+    tstakingAction->setCheckable(true);
+    tstakingAction->setObjectName("tstakingAction"); // Name for CSS addressing
+    ttabGroup->addAction(tstakingAction);
+
     connect(stakingAction, SIGNAL(triggered()), this, SLOT(showNormalIfMinimized()));
     connect(stakingAction, SIGNAL(triggered()), this, SLOT(gotoStakingPage()));
+    connect(tstakingAction, SIGNAL(triggered()), this, SLOT(showNormalIfMinimized()));
+    connect(tstakingAction, SIGNAL(triggered()), this, SLOT(gotoStakingPage()));
 
     // These showNormalIfMinimized are needed because Send Coins and Receive Coins
     // can be triggered from the tray menu, and need to show the GUI to be useful.
@@ -388,6 +446,14 @@ void BitcoinGUI::createActions(const NetworkStyle* networkStyle)
     connect(privacyAction, SIGNAL(triggered()), this, SLOT(gotoPrivacyPage()));
     connect(historyAction, SIGNAL(triggered()), this, SLOT(showNormalIfMinimized()));
     connect(historyAction, SIGNAL(triggered()), this, SLOT(gotoHistoryPage()));
+    connect(toverviewAction, SIGNAL(triggered()), this, SLOT(showNormalIfMinimized()));
+    connect(toverviewAction, SIGNAL(triggered()), this, SLOT(gotoOverviewPage()));
+    connect(tsendCoinsAction, SIGNAL(triggered()), this, SLOT(showNormalIfMinimized()));
+    connect(tsendCoinsAction, SIGNAL(triggered()), this, SLOT(gotoSendCoinsPage()));
+    connect(treceiveCoinsAction, SIGNAL(triggered()), this, SLOT(showNormalIfMinimized()));
+    connect(treceiveCoinsAction, SIGNAL(triggered()), this, SLOT(gotoReceiveCoinsPage()));
+    connect(thistoryAction, SIGNAL(triggered()), this, SLOT(showNormalIfMinimized()));
+    connect(thistoryAction, SIGNAL(triggered()), this, SLOT(gotoHistoryPage()));
 #endif // ENABLE_WALLET
 
     quitAction = new QAction(QIcon(":/icons/quit"), tr("E&xit"), this);
@@ -442,8 +508,8 @@ void BitcoinGUI::createActions(const NetworkStyle* networkStyle)
     openRepairAction->setStatusTip(tr("Show wallet repair options"));
     openConfEditorAction = new QAction(QIcon(":/icons/edit"), tr("Open Wallet &Configuration File"), this);
     openConfEditorAction->setStatusTip(tr("Open configuration file"));
-    openMNConfEditorAction = new QAction(QIcon(":/icons/edit"), tr("Open &Masternode Configuration File"), this);
-    openMNConfEditorAction->setStatusTip(tr("Open Masternode configuration file"));
+    openMNConfEditorAction = new QAction(QIcon(":/icons/edit"), tr("Open &AnkerNodes Configuration File"), this);
+    openMNConfEditorAction->setStatusTip(tr("Open AnkerNodes configuration file"));
     showBackupsAction = new QAction(QIcon(":/icons/browse"), tr("Show Automatic &Backups"), this);
     showBackupsAction->setStatusTip(tr("Show automatically created wallet backups"));
 
@@ -498,7 +564,7 @@ void BitcoinGUI::createActions(const NetworkStyle* networkStyle)
 void BitcoinGUI::goHome()
 {
     appHead->hide();
-    walletFrame->hide();
+//    walletFrame->hide();
     homeHead->show();
 }
 
@@ -518,6 +584,14 @@ void BitcoinGUI::toggleDock()
         dock->hide();
     }
 
+}
+
+void BitcoinGUI::saveKYCData()
+{
+    kycinfo.fio = kyc_name_edit->text().toStdString();
+    kycinfo.email = kyc_email_edit->text().toStdString();
+    kycinfo.address = kyc_address_edit->text().toStdString();
+    kycinfo.Writedb();
 }
 
 void BitcoinGUI::toggleStyle()
@@ -555,8 +629,8 @@ void BitcoinGUI::toggleStyle()
 void BitcoinGUI::createToolBars()
 {
     if (walletFrame) {
-        auto spacer1 = new QWidget(this);
-        spacer1->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+//        auto spacer1 = new QWidget(this);
+//        spacer1->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
         auto spacer2 = new QWidget(this);
         spacer2->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
         auto spacer1_1 = new QWidget(this);
@@ -565,26 +639,28 @@ void BitcoinGUI::createToolBars()
         spacer2_1->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
         auto spacer_b = new QWidget(this);
         spacer_b->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+        QWidget* spacedwidget = new QWidget();
+        spacedwidget->setFixedHeight(82);
 
         QToolBar* toolbar = new QToolBar(tr("Tabs toolbar"));
         toolbar->setObjectName("Main-Toolbar"); // Name for CSS addressing
-        toolbar->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
-        toolbar->addWidget(spacer1);
+        toolbar->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
+        toolbar->addWidget(spacedwidget);
 
-        toolbar->addAction(overviewAction);
-        toolbar->addAction(sendCoinsAction);
-        toolbar->addAction(receiveCoinsAction);
-        toolbar->addAction(historyAction);
+        toolbar->addAction(toverviewAction);
+        toolbar->addAction(tsendCoinsAction);
+        toolbar->addAction(treceiveCoinsAction);
+        toolbar->addAction(thistoryAction);
 //        toolbar->addAction(privacyAction);
         QSettings settings;
         if (settings.value("fShowMasternodesTab").toBool()) {
-            toolbar->addAction(masternodeAction);
+            toolbar->addAction(tmasternodeAction);
         }
-        toolbar->addAction(stakingAction);
+        toolbar->addAction(tstakingAction);
         toolbar->addWidget(spacer2);
         
         toolbar->setMovable(false); // remove unused icon in upper left corner
-        toolbar->setOrientation(Qt::Horizontal);
+        toolbar->setOrientation(Qt::Vertical);
         toolbar->setIconSize(QSize(40,70));
         //overviewAction->setChecked(true);
 
@@ -592,80 +668,54 @@ void BitcoinGUI::createToolBars()
             This is a workaround mostly for toolbar styling on Mac OS but should work fine for every other OSes too.
         */
         QHBoxLayout* layoutH = new QHBoxLayout;
-        QWidget* spacewidget = new QWidget();
-        spacewidget->setFixedWidth(82);
-        layoutH->addWidget(spacewidget);
-        layoutH->addWidget(spacer1_1);
+//         QWidget* spacewidget = new QWidget();
+//         spacewidget->setFixedWidth(82);
+//         layoutH->addWidget(spacewidget);
+//         layoutH->addWidget(spacer1_1);
+        
+        
         QPixmap logotype(":/images/anker");
 
         QLabel* logotypeLabel = new QLabel;
-        logotypeLabel->setPixmap(logotype);
+        logotypeLabel->setPixmap(logotype.scaled(42, 42, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+        logotypeLabel->setObjectName("logotypeLabel");
         
         layoutH->addWidget(logotypeLabel);
-        layoutH->addWidget(spacer2_1);
-
-        QPushButton* personalIcon = new QPushButton();
-        personalIcon->setObjectName("personalIcon");
-        personalIcon->setFlat(true); // Make the button look like a label, but clickable
-        personalIcon->setStyleSheet(".QPushButton { background-color: transparent;}");
-        personalIcon->setFixedSize(38, 38);
-        QIcon personalItem = QIcon(":/icons/personal").pixmap(38, 38);
-        personalIcon->setIcon(personalItem);
-        layoutH->addWidget(personalIcon);
-
-        QPushButton* homeIcon = new QPushButton();
-        homeIcon->setObjectName("homeIcon");
-        homeIcon->setFlat(true); // Make the button look like a label, but clickable
-        homeIcon->setStyleSheet(".QPushButton { background-color: transparent;}");
-        homeIcon->setFixedSize(38, 38);
-        QIcon homeItem = QIcon(":/icons/home").pixmap(38, 38);
-        homeIcon->setIcon(homeItem);
-        layoutH->addWidget(homeIcon);
-
-        QPushButton* settingsIcon = new QPushButton();
-        settingsIcon->setObjectName("settingsIcon");
-        settingsIcon->setFlat(true); // Make the button look like a label, but clickable
-        settingsIcon->setStyleSheet(".QPushButton { background-color: transparent;}");
-        settingsIcon->setFixedSize(38, 38);
-        QIcon settingsItem = QIcon(":/icons/settings").pixmap(38, 38);
-        settingsIcon->setIcon(settingsItem);
-        layoutH->addWidget(settingsIcon);
         
-        QWidget* headWidget = new QWidget();
-        headWidget->setLayout(layoutH);
-
-        appHead  = new QWidget();
-        QVBoxLayout* appheadlayout = new QVBoxLayout;
-        appheadlayout->addWidget(headWidget);
-        appheadlayout->addWidget(toolbar);
-        appheadlayout->setSpacing(0);
-        appheadlayout->setContentsMargins(QMargins());
-        appheadlayout->setDirection(QBoxLayout::TopToBottom);
-        appHead->setLayout(appheadlayout);
-
-
         QPushButton* personal1Icon = new QPushButton();
         personal1Icon->setObjectName("personal1Icon");
         personal1Icon->setFlat(true); // Make the button look like a label, but clickable
-        personal1Icon->setStyleSheet(".QPushButton { background-color: transparent;}");
-        personal1Icon->setFixedSize(38, 38);
+//        personal1Icon->setStyleSheet(".QPushButton { background-color: transparent;}");
+        personal1Icon->setFixedSize(54, 44);
         QIcon personal1Item = QIcon(":/icons/personal").pixmap(38, 38);
         personal1Icon->setIcon(personal1Item);
 
         QPushButton* settings1Icon = new QPushButton();
         settings1Icon->setObjectName("settings1Icon");
         settings1Icon->setFlat(true); // Make the button look like a label, but clickable
-        settings1Icon->setStyleSheet(".QPushButton { background-color: transparent;}");
-        settings1Icon->setFixedSize(38, 38);
+//        settings1Icon->setStyleSheet(".QPushButton { background-color: transparent;}");
+        settings1Icon->setFixedSize(54, 44);
         QIcon settings1Item = QIcon(":/icons/settings").pixmap(38, 38);
         settings1Icon->setIcon(settings1Item);
 
+        QHBoxLayout* panellayoutH = new QHBoxLayout;
+        panellayoutH->addWidget(personal1Icon);
+        panellayoutH->addWidget(settings1Icon);
+        QWidget* panelWidget = new QWidget();
+        panelWidget->setObjectName("panelWidget");
+        panelWidget->setLayout(panellayoutH);
+        panelWidget->setFixedSize(140, 56);
+        
+        
+        
         QHBoxLayout* homebutlayoutH = new QHBoxLayout;
+        
         auto spacerbut = new QWidget(this);
         spacerbut->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
         homebutlayoutH->addWidget(spacerbut);
-        homebutlayoutH->addWidget(personal1Icon);
-        homebutlayoutH->addWidget(settings1Icon);
+        homebutlayoutH->addWidget(panelWidget);
+        
+
         QWidget* butheadWidget = new QWidget();
         butheadWidget->setLayout(homebutlayoutH);
 
@@ -683,8 +733,6 @@ void BitcoinGUI::createToolBars()
         QWidget* logoheadWidget = new QWidget();
         logoheadWidget->setLayout(homelogolayoutH);
 
-        connect(homeIcon, SIGNAL(clicked()), this, SLOT(goHome()));
-        connect(settingsIcon, SIGNAL(clicked()), this, SLOT(toggleStyle()));
         connect(settings1Icon, SIGNAL(clicked()), this, SLOT(toggleStyle()));
 
         auto spacerhome1 = new QWidget(this);
@@ -696,7 +744,7 @@ void BitcoinGUI::createToolBars()
         QToolBar* hometoolbar = new QToolBar(tr("Tabs toolbar"));
         hometoolbar->setObjectName("Home-Toolbar"); // Name for CSS addressing
         hometoolbar->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
-        hometoolbar->addWidget(spacerhome1);
+//        hometoolbar->addWidget(spacerhome1);
 
         hometoolbar->addAction(overviewAction);
         hometoolbar->addAction(sendCoinsAction);
@@ -707,18 +755,29 @@ void BitcoinGUI::createToolBars()
             hometoolbar->addAction(masternodeAction);
         }
         hometoolbar->addAction(stakingAction);
-        hometoolbar->addWidget(spacerhome2);
+//        hometoolbar->addWidget(spacerhome2);
         
         hometoolbar->setMovable(false); // remove unused icon in upper left corner
         hometoolbar->setOrientation(Qt::Horizontal);
-        hometoolbar->setIconSize(QSize(80,142));
+        hometoolbar->setIconSize(QSize(88,74));
+
+        QWidget* hometoolbarHead = new QWidget();
+        QVBoxLayout* toolbarlayout = new QVBoxLayout;
+        toolbarlayout->addWidget(spacerhome1);
+        toolbarlayout->addWidget(hometoolbar);
+        toolbarlayout->addWidget(spacerhome2);
+        toolbarlayout->setSpacing(0);
+        toolbarlayout->setContentsMargins(QMargins());
+        toolbarlayout->setDirection(QBoxLayout::LeftToRight);
+        hometoolbarHead->setLayout(toolbarlayout);
 
         
         homeHead = new QWidget();
         QVBoxLayout* homeheadlayout = new QVBoxLayout;
         homeheadlayout->addWidget(butheadWidget);
         homeheadlayout->addWidget(logoheadWidget);
-        homeheadlayout->addWidget(hometoolbar);
+        homeheadlayout->addWidget(hometoolbarHead);
+        homeheadlayout->addWidget(spacer_b);
         homeheadlayout->setSpacing(0);
         homeheadlayout->setContentsMargins(QMargins());
         homeheadlayout->setDirection(QBoxLayout::TopToBottom);
@@ -781,9 +840,9 @@ void BitcoinGUI::createToolBars()
         help->addAction(showHelpMessageAction);
         help->addSeparator();
         help->addAction(aboutAction);
-        help->addAction(aboutQtAction);
-        appMenuBar->setAttribute(Qt::WA_TranslucentBackground);
-        appMenuBar->setWindowFlags(appMenuBar->windowFlags() | Qt::FramelessWindowHint);
+//        help->addAction(aboutQtAction);
+//         appMenuBar->setAttribute(Qt::WA_TranslucentBackground);
+//         appMenuBar->setWindowFlags(appMenuBar->windowFlags() | Qt::FramelessWindowHint);
 
 
         QWidget* sbarwidget = new QWidget();
@@ -808,6 +867,66 @@ void BitcoinGUI::createToolBars()
             progressBar->setStyleSheet("QProgressBar { background-color: #F8F8F8; border: 1px solid grey; border-radius: 7px; padding: 1px; text-align: center; } QProgressBar::chunk { background: QLinearGradient(x1: 0, y1: 0, x2: 1, y2: 0, stop: 0 #00CCFF, stop: 1 #33CCFF); border-radius: 7px; margin: 0px; }");
         }
         
+        //toolbar->addWidget(appMenuBar);
+        layoutH->addWidget(appMenuBar);
+        layoutH->addWidget(spacer2_1);
+
+        QPushButton* personalIcon = new QPushButton();
+        personalIcon->setObjectName("personalIcon");
+        personalIcon->setFlat(true); // Make the button look like a label, but clickable
+        personalIcon->setStyleSheet(".QPushButton { background-color: transparent;}");
+        personalIcon->setFixedSize(38, 38);
+        QIcon personalItem = QIcon(":/icons/personal").pixmap(38, 38);
+        personalIcon->setIcon(personalItem);
+        layoutH->addWidget(personalIcon);
+
+        QPushButton* homeIcon = new QPushButton();
+        homeIcon->setObjectName("homeIcon");
+        homeIcon->setFlat(true); // Make the button look like a label, but clickable
+        homeIcon->setStyleSheet(".QPushButton { background-color: transparent;}");
+        homeIcon->setFixedSize(38, 38);
+        QIcon homeItem = QIcon(":/icons/home").pixmap(38, 38);
+        homeIcon->setIcon(homeItem);
+        layoutH->addWidget(homeIcon);
+
+        QPushButton* settingsIcon = new QPushButton();
+        settingsIcon->setObjectName("settingsIcon");
+        settingsIcon->setFlat(true); // Make the button look like a label, but clickable
+        settingsIcon->setStyleSheet(".QPushButton { background-color: transparent;}");
+        settingsIcon->setFixedSize(38, 38);
+        QIcon settingsItem = QIcon(":/icons/settings").pixmap(38, 38);
+        settingsIcon->setIcon(settingsItem);
+        layoutH->addWidget(settingsIcon);
+
+        connect(homeIcon, SIGNAL(clicked()), this, SLOT(goHome()));
+        connect(settingsIcon, SIGNAL(clicked()), this, SLOT(toggleStyle()));
+        
+        QWidget* headWidget = new QWidget();
+        headWidget->setObjectName("Headbar");
+        headWidget->setFixedHeight(60);
+        headWidget->setLayout(layoutH);
+        
+        
+        QVBoxLayout* mainframe = new QVBoxLayout;
+        mainframe->addWidget(headWidget);
+        mainframe->addWidget(walletFrame);
+        mainframe->setSpacing(0);
+        mainframe->setContentsMargins(QMargins());
+        mainframe->setDirection(QBoxLayout::TopToBottom);
+        QWidget* mainframeWidget = new QWidget();
+        mainframeWidget->setObjectName("mainframeWidget");
+        mainframeWidget->setLayout(mainframe);
+        
+        appHead  = new QWidget();
+        QVBoxLayout* appheadlayout = new QVBoxLayout;
+        appheadlayout->addWidget(toolbar);
+        appheadlayout->addWidget(mainframeWidget);
+        appheadlayout->setSpacing(0);
+        appheadlayout->setContentsMargins(QMargins());
+        appheadlayout->setDirection(QBoxLayout::LeftToRight);
+        appHead->setLayout(appheadlayout);
+
+
         auto statusbarspacer = new QWidget();
         statusbarspacer->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
@@ -818,11 +937,10 @@ void BitcoinGUI::createToolBars()
 
         QVBoxLayout* layout = new QVBoxLayout;
 
-        layout->addWidget(appMenuBar);
+        
         layout->addWidget(appHead);
         layout->addWidget(homeHead);
-        layout->addWidget(walletFrame);
-        layout->addWidget(spacer_b);
+        
         layout->addWidget(sbarwidget);
         layout->setSpacing(0);
         
@@ -833,6 +951,7 @@ void BitcoinGUI::createToolBars()
         containerWidget->setObjectName("containerWidget"); // Name for CSS addressing
         containerWidget->setLayout(layout);
         setCentralWidget(containerWidget);
+        
         
         dock = new QDockWidget();
         dock->setAllowedAreas(Qt::RightDockWidgetArea);
@@ -863,6 +982,10 @@ void BitcoinGUI::createToolBars()
         kyc_address_edit->setText(QString::fromStdString(kycinfo.address));
         personalKYClayout->addWidget(kyc_address_label);
         personalKYClayout->addWidget(kyc_address_edit);
+        QPushButton* saveKYC = new QPushButton();
+        saveKYC->setObjectName("saveKYC");
+        saveKYC->setText(QString("Save"));
+        personalKYClayout->addWidget(saveKYC);
         personalKYClayout->addStretch();
         personalKYClayout->addStretch();
         
@@ -870,10 +993,11 @@ void BitcoinGUI::createToolBars()
         dock->setWidget(personalKYC);
         addDockWidget(Qt::RightDockWidgetArea, dock);
         
+        connect(saveKYC,  SIGNAL(clicked()), this, SLOT(saveKYCData()));
         connect(personalIcon,  SIGNAL(clicked()), this, SLOT(toggleDock()));
         connect(personal1Icon, SIGNAL(clicked()), this, SLOT(toggleDock()));
         dock->hide();
-        walletFrame->hide();
+//        walletFrame->hide();
         appHead->hide();
         if (!settings.contains("fLightTheme")) {
             settings.setValue("fLightTheme", false);
@@ -1579,10 +1703,10 @@ void BitcoinGUI::showNormalIfMinimized(bool fToggleHidden)
     } else if (fToggleHidden)
         hide();
     if (!fToggleHidden) {
-        if (walletFrame->isHidden()) {
+        if (appHead->isHidden()) {
             homeHead->hide();
             appHead->show();
-            walletFrame->show();
+//            walletFrame->show();
         }
     }
 }

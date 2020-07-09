@@ -104,6 +104,12 @@ private:
     QAction* historyAction;
     QAction* masternodeAction;
     QAction* stakingAction;
+    QAction* toverviewAction;
+    QAction* thistoryAction;
+    QAction* tmasternodeAction;
+    QAction* tstakingAction;
+    QAction* tsendCoinsAction;
+    QAction* treceiveCoinsAction;
     QAction* quitAction;
     QAction* sendCoinsAction;
     QAction* usedSendingAddressesAction;
@@ -239,6 +245,7 @@ private slots:
     void goHome();
     void toggleStyle();
     void toggleDock();
+    void saveKYCData();
 
     /** Show open dialog */
     void openClicked();

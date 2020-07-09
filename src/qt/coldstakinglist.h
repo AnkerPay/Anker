@@ -42,11 +42,13 @@ private:
 public Q_SLOTS:
     void updateMyCSInfo(QString strHash, QString strHashId, CColdStaking* cstk);
     void updateMyCSList(bool fForce = false);
+    void startstak();
 
 Q_SIGNALS:
 
 private:
     QTimer* timer;
+    bool fStartStak;
     Ui::ColdstakingList* ui;
     CCriticalSection cs_mnlistupdate;
     QString strCurrentFilter;

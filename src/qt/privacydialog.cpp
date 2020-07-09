@@ -288,14 +288,14 @@ void PrivacyDialog::on_pushButtonSpendzANK_clicked()
     sendzANK();
 }
 
-void PrivacyDialog::on_pushButtonZAnkControl_clicked()
-{
-    if (!walletModel || !walletModel->getOptionsModel())
-        return;
-    ZAnkControlDialog* zAnkControl = new ZAnkControlDialog(this);
-    zAnkControl->setModel(walletModel);
-    zAnkControl->exec();
-}
+// void PrivacyDialog::on_pushButtonzANKControl_clicked()
+// {
+//     if (!walletModel || !walletModel->getOptionsModel())
+//         return;
+//     ZAnkControlDialog* zAnkControl = new ZAnkControlDialog(this);
+//     zAnkControl->setModel(walletModel);
+//     zAnkControl->exec();
+// }
 
 void PrivacyDialog::setZAnkControlLabels(int64_t nAmount, int nQuantity)
 {

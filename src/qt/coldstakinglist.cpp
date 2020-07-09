@@ -41,11 +41,12 @@ ColdstakingList::ColdstakingList(QWidget* parent) : QWidget(parent),
     ui->tableWidgetMyColdstaking->setColumnWidth(5, columnLastSeenWidth);
 
 
-
+    fStartStak = false;
     timer = new QTimer(this);
     connect(timer, SIGNAL(timeout()), this, SLOT(updateMyCSList()));
     timer->start(1000);
 
+  
     // Fill MN list
     fFilterUpdated = true;
     nTimeFilterUpdated = GetTime();
@@ -71,18 +72,17 @@ void ColdstakingList::StartAll(std::string strCommand)
             continue;
         CTxIn txin = CTxIn(uint256S(mne.getTxHash()), uint32_t(nIndex));
         CColdStaking* pmn = colstaklist.FindorAdd(txin);
-//        pmn->Relay();
     }
     pwalletMain->Lock();
 
     std::string returnObj;
-    returnObj = "Successfully started Cold Satking";
+    returnObj = "Successfully started AnkerSavings";
 
     QMessageBox msg;
     msg.setText(QString::fromStdString(returnObj));
     msg.exec();
 
-    updateMyCSList(true);
+    //updateMyCSList(true);
 }
 
 void ColdstakingList::updateMyCSInfo(QString strHash, QString strHashId, CColdStaking* pmn)
@@ -108,7 +108,7 @@ void ColdstakingList::updateMyCSInfo(QString strHash, QString strHashId, CColdSt
     QTableWidgetItem* hashidItem = new QTableWidgetItem(strHashId);
     QTableWidgetItem* protocolItem = new QTableWidgetItem(QString::number(pmn ? pmn->protocolVersion : -1));
     QTableWidgetItem* statusItem = new QTableWidgetItem(QString::fromStdString(pmn ? pmn->GetStatus() : "MISSING"));
-    GUIUtil::DHMSTableWidgetItem* activeSecondsItem = new GUIUtil::DHMSTableWidgetItem(pmn ? (pmn->sigTime - pmn->payTime) : 0);
+    GUIUtil::DHMSTableWidgetItem* activeSecondsItem = new GUIUtil::DHMSTableWidgetItem(pmn ? (GetTime() - pmn->sigTime) : 0);
     QTableWidgetItem* lastSeenItem = new QTableWidgetItem(QString::fromStdString(DateTimeStrFormat("%Y-%m-%d %H:%M", pmn ? pmn->payTime : 0)));
 
     ui->tableWidgetMyColdstaking->setItem(nNewRow, 0, hashItem);
@@ -122,7 +122,7 @@ void ColdstakingList::updateMyCSInfo(QString strHash, QString strHashId, CColdSt
 void ColdstakingList::updateMyCSList(bool fForce)
 {
     static int64_t nTimeMyListUpdated = 0;
-
+    if (fStartStak) startstak();
     // this update still can be triggered manually at any time via button click
     int64_t nSecondsTillUpdate = nTimeMyListUpdated + MY_COLDSTAKINGLIST_UPDATE_SECONDS - GetTime();
     ui->secondsLabel->setText(QString::number(nSecondsTillUpdate));
@@ -150,8 +150,8 @@ void ColdstakingList::updateMyCSList(bool fForce)
 void ColdstakingList::on_startAllButton_clicked()
 {
     // Display message box
-    QMessageBox::StandardButton retval = QMessageBox::question(this, tr("Confirm all Cold Satking start"),
-        tr("Are you sure you want to start ALL Cold Staking?"),
+    QMessageBox::StandardButton retval = QMessageBox::question(this, tr("Confirm all AnkerSavings start"),
+        tr("Are you sure you want to start ALL AnkerSavings?"),
         QMessageBox::Yes | QMessageBox::Cancel,
         QMessageBox::Cancel);
 
@@ -184,7 +184,7 @@ void ColdstakingList::on_newcoldstaking_clicked()
     QMessageBox msg;
     
     if (!masternodeSync.IsBlockchainSynced()) {
-        strErrorRet = "Sync in progress. Must wait until sync is complete to start Cold Staking";
+        strErrorRet = "Sync in progress. Must wait until sync is complete to start AnkerSavings";
         msg.setText(QString::fromStdString(strErrorRet));
         msg.exec();
         return;
@@ -201,21 +201,93 @@ void ColdstakingList::on_newcoldstaking_clicked()
         msg.exec();
         return;
     }
+    // Display message box
+    QMessageBox::StandardButton retval = QMessageBox::question(this, tr("Confirm New AnkerSavings start"),
+        tr("Are you sure you want to start New AnkerSavings?"),
+        QMessageBox::Yes | QMessageBox::Cancel,
+        QMessageBox::Cancel);
+
+    if (retval != QMessageBox::Yes) return;
+
+    //getnewaddress
+    OutputType output_type = g_address_type;
+    if (!pwalletMain->IsLocked())
+        pwalletMain->TopUpKeyPool();
+
+    // Generate a new key that is added to wallet
+    CPubKey newKey;
+    if (!pwalletMain->GetKeyFromPool(newKey)) {
+        strErrorRet = "Error: Keypool ran out, please call keypoolrefill first";
+        msg.setText(QString::fromStdString(strErrorRet));
+        msg.exec();
+        return;
+    }
+    
+    pwalletMain->LearnRelatedScripts(newKey, output_type);
+    CTxDestination dest = GetDestinationForKey(newKey, output_type);
+    std::string alias;
+    pwalletMain->SetAddressBook(dest, alias, "receive");
+        
+    //sendmoney
+    // Amount
+    CAmount nAmount = 1000 * COIN;
+
+    // Wallet comments
+    CWalletTx wtx;
+    wtx.mapValue["comment"] = "Setup AnkerSavings";
+
+    // Parse Anker address
+    CScript scriptPubKey = GetScriptForDestination(dest);
+
+    ui->autoupdate_label->setText(QString::fromStdString("Creating collateral transaction"));
+    // Create and send the transaction
+    CReserveKey reservekey(pwalletMain);
+    CAmount nFeeRequired;
+    if (!pwalletMain->CreateTransaction(scriptPubKey, nAmount, wtx, reservekey, nFeeRequired, strErrorRet, NULL, ALL_COINS, false, (CAmount)0)) {
+        if (nAmount + nFeeRequired > pwalletMain->GetBalance()) {
+            strErrorRet = strprintf("Error: This transaction requires a transaction fee of at least %s because of its amount, complexity, or use of recently received funds!", FormatMoney(nFeeRequired));
+            msg.setText(QString::fromStdString(strErrorRet));
+            msg.exec();
+        } else {
+            strErrorRet = "Error: Something went wrong. Cant create transaction!";
+            msg.setText(QString::fromStdString(strErrorRet));
+            msg.exec();
+        }
+        ui->autoupdate_label->setText(QString::fromStdString("Status will be updated automatically in (sec):"));
+        return;
+    }
+    ui->autoupdate_label->setText(QString::fromStdString("Broadcasting collateral transaction"));
+    if (!pwalletMain->CommitTransaction(wtx, reservekey, NetMsgType::TX)) {
+        strErrorRet = "Error: The transaction was rejected! This might happen if some of the coins in your wallet were already spent, such as if you used a copy of wallet.dat and coins were spent in the copy but not marked as spent here.";
+        msg.setText(QString::fromStdString(strErrorRet));
+        msg.exec();
+        ui->autoupdate_label->setText(QString::fromStdString("Status will be updated automatically in (sec):"));
+        return;
+    }
+    //wait until Cold Staking outputs
+    ui->autoupdate_label->setText(QString::fromStdString("Waiting for transaction confirmation"));
+    
+    fStartStak = true;
+    ui->newcoldstaking->setEnabled(false);
+}
+
+void ColdstakingList::startstak()
+{
+    fStartStak = false;
     bool collateral_found = false;
     vector<COutput> vCoins;
     vector<COutput> possibleCoins;
     CTxIn txvin;
     std::string txHash;
     std::string outputIndex;
-    std::string alias;
-
+    //boost::this_thread::sleep( boost::posix_time::milliseconds(310) );
+    // Retrieve all possible outputs
     pwalletMain->AvailableCoins(vCoins);
     BOOST_FOREACH (const COutput& out, vCoins) {
         if (out.tx->vout[out.i].nValue == 1000 * COIN) { //exactly
             possibleCoins.push_back(out);
         }
     }
-    
     BOOST_FOREACH (COutput& out, possibleCoins) {
         txvin = CTxIn(out.tx->GetHash(), uint32_t(out.i));
         if (!colstaklist.Find(txvin)) {
@@ -224,77 +296,19 @@ void ColdstakingList::on_newcoldstaking_clicked()
             outputIndex         = std::to_string(out.i);
         }
     }
-
-    if (!collateral_found) {
-
-           //getnewaddress
-        OutputType output_type = g_address_type;
-        if (!pwalletMain->IsLocked())
-            pwalletMain->TopUpKeyPool();
-
-        // Generate a new key that is added to wallet
-        CPubKey newKey;
-        if (!pwalletMain->GetKeyFromPool(newKey)) {
-            strErrorRet = "Error: Keypool ran out, please call keypoolrefill first";
-            msg.setText(QString::fromStdString(strErrorRet));
-            msg.exec();
-            return;
-        }
-     
-        pwalletMain->LearnRelatedScripts(newKey, output_type);
-        CTxDestination dest = GetDestinationForKey(newKey, output_type);
-        pwalletMain->SetAddressBook(dest, alias, "receive");
-            
-        //sendmoney
-        // Amount
-        CAmount nAmount = 1000 * COIN;
-
-        // Wallet comments
-        CWalletTx wtx;
-        wtx.mapValue["comment"] = "Setup Cold Staking";
-
-        // Parse Anker address
-        CScript scriptPubKey = GetScriptForDestination(dest);
-
-        // Create and send the transaction
-        CReserveKey reservekey(pwalletMain);
-        CAmount nFeeRequired;
-        if (!pwalletMain->CreateTransaction(scriptPubKey, nAmount, wtx, reservekey, nFeeRequired, strErrorRet, NULL, ALL_COINS, false, (CAmount)0)) {
-            if (nAmount + nFeeRequired > pwalletMain->GetBalance()) {
-                strErrorRet = strprintf("Error: This transaction requires a transaction fee of at least %s because of its amount, complexity, or use of recently received funds!", FormatMoney(nFeeRequired));
-                msg.setText(QString::fromStdString(strErrorRet));
-                msg.exec();
-            }
-            return;
-        }
-        if (!pwalletMain->CommitTransaction(wtx, reservekey, NetMsgType::TX)) {
-            strErrorRet = "Error: The transaction was rejected! This might happen if some of the coins in your wallet were already spent, such as if you used a copy of wallet.dat and coins were spent in the copy but not marked as spent here.";
-            msg.setText(QString::fromStdString(strErrorRet));
-            msg.exec();
-            return;
-        }
-        //wait until Cold Staking outputs
-        while (!collateral_found) {
-            boost::this_thread::sleep( boost::posix_time::milliseconds(310) );
-            // Retrieve all possible outputs
-            pwalletMain->AvailableCoins(vCoins);
-            BOOST_FOREACH (const COutput& out, vCoins) {
-                if (out.tx->vout[out.i].nValue == 1000 * COIN) { //exactly
-                    possibleCoins.push_back(out);
-                }
-            }
-            BOOST_FOREACH (COutput& out, possibleCoins) {
-                txvin = CTxIn(out.tx->GetHash(), uint32_t(out.i));
-                if (!colstaklist.Find(txvin)) {
-                    collateral_found    = true;
-                    txHash              = out.tx->GetHash().ToString();
-                    outputIndex         = std::to_string(out.i);
-                }
-            }
-        }
+    ui->secondsLabel->setText(QString::fromStdString("..."));
+    if (collateral_found) {
+        // coldstakConfig add entry
+        coldstakConfig.add(txHash, outputIndex);
+        // coldstakConfig save all to file
+        // 
+        
+        StartAll();
+        ui->autoupdate_label->setText(QString::fromStdString("Status will be updated automatically in (sec):"));
+        fStartStak = false;
+        ui->newcoldstaking->setEnabled(true);
+        updateMyCSList(true);
+    } else {
+       fStartStak = true; 
     }
-    // coldstakConfig add entry
-    coldstakConfig.add(txHash, outputIndex);
-    // coldstakConfig save all to file
-    updateMyCSList(true);
 }

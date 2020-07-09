@@ -19,7 +19,7 @@ WalletFrame::WalletFrame(BitcoinGUI* _gui) : QFrame(_gui),
     QHBoxLayout* walletFrameLayout = new QHBoxLayout(this);
     setContentsMargins(0, 0, 0, 0);
     walletStack = new QStackedWidget(this);
-    walletFrameLayout->setContentsMargins(200, 0, 200, 0);
+    walletFrameLayout->setContentsMargins(0, 0, 20, 0);
     walletFrameLayout->addWidget(walletStack);
 
     QLabel* noWallet = new QLabel(tr("No wallet has been loaded."));

@@ -26,7 +26,7 @@
 #include <QSettings>
 #include <QTimer>
 
-#define DECORATION_SIZE 48
+#define DECORATION_SIZE 40
 #define ICON_OFFSET 16
 #define NUM_ITEMS 9
 
@@ -45,16 +45,28 @@ public:
     inline void paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const
     {
         painter->save();
+        painter->setRenderHint(QPainter::Antialiasing);
 
         QIcon icon = qvariant_cast<QIcon>(index.data(Qt::DecorationRole));
         QRect mainRect = option.rect;
         mainRect.moveLeft(ICON_OFFSET);
-        QRect decorationRect(mainRect.topLeft(), QSize(DECORATION_SIZE, DECORATION_SIZE));
+        QRect decorationRect(QPoint(mainRect.left(), mainRect.top() + 10), QSize(DECORATION_SIZE, DECORATION_SIZE));
         int xspace = DECORATION_SIZE + 8;
         int ypad = 6;
         int halfheight = (mainRect.height() - 2 * ypad) / 2;
-        QRect amountRect(mainRect.left() + xspace, mainRect.top() + ypad, mainRect.width() - xspace - ICON_OFFSET, halfheight);
-        QRect addressRect(mainRect.left() + xspace, mainRect.top() + ypad + halfheight, mainRect.width() - xspace, halfheight);
+        QRect amountRect(mainRect.left() + xspace, mainRect.top() + ypad, mainRect.width() - xspace - DECORATION_SIZE, halfheight);
+        QRect addressRect(mainRect.left() + xspace, mainRect.top() + ypad + halfheight, mainRect.width() - xspace - ICON_OFFSET, halfheight);
+
+                
+        QPainterPath path;
+        QRect borderRect(option.rect.left() + 2.5, option.rect.top() + 4.5, option.rect.width() - 2.5, option.rect.height() - 4.5);
+        path.addRoundedRect(borderRect, 10, 10);
+        QColor borderColor(174,178,198); 
+        QPen pen(borderColor, 1);
+        painter->setPen(pen);
+        painter->drawPath(path);
+
+
         icon.paint(painter, decorationRect);
 
         QDateTime date = index.data(TransactionTableModel::DateRole).toDateTime();
@@ -114,7 +126,7 @@ public:
 
     inline QSize sizeHint(const QStyleOptionViewItem& option, const QModelIndex& index) const
     {
-        return QSize(DECORATION_SIZE, DECORATION_SIZE);
+        return QSize(DECORATION_SIZE+20, DECORATION_SIZE+20);
     }
 
     int unit;

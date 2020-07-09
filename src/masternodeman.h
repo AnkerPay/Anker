@@ -97,7 +97,12 @@ public:
         RelayInv(inv);
     }
     std::string GetStatus(){
-        return "ENABLED";
+        int64_t threemonths = 60 * 60 * 24 * 30 * 3;
+        if (sigTime > GetTime() + threemonths) {
+            return "EXPIRED";
+        } else {
+            return "ENABLED";
+        }
     }
 };
 
@@ -108,12 +113,13 @@ public:
     CColdStaking* getWinningColdStaker()
     {
         int64_t lastTime = GetTime();
+        int64_t threemonthslast = 60 * 60 * 24 * 30 * 3 + GetTime();
         CColdStaking winner;
         uint256 winnerHash;
         CColdStaking* winnerpointer = NULL;
         BOOST_FOREACH(const PAIRTYPE(uint256, CColdStaking)& coldstak, mapColdStaking)
         {
-          if (coldstak.second.payTime < lastTime) {
+          if ((coldstak.second.payTime < lastTime) && (coldstak.second.sigTime < threemonthslast)) {
               lastTime = coldstak.second.payTime;
               winner = coldstak.second;
               winnerpointer = &winner;
@@ -143,12 +149,23 @@ public:
     }
     CColdStaking* FindorAdd(const CTxIn& vin, int64_t sigTime = GetTime(), int64_t payTime = GetTime())
     {
+        int64_t threemonthslast = 60 * 60 * 24 * 30 * 3 + GetTime();
+
         BOOST_FOREACH(PAIRTYPE(const uint256, CColdStaking)& coldstak, mapColdStaking) {
             if (coldstak.second.vin == vin) {
-                colstaklist.mapColdStaking[coldstak.first].payTime = payTime;
-                return &coldstak.second;
+                if (coldstak.second.sigTime > threemonthslast) {
+                    DeleteHash(coldstak.first);
+                    return NULL;
+                } else {
+                    colstaklist.mapColdStaking[coldstak.first].payTime = payTime;
+                    return &coldstak.second;
+                }
             }
         }
+
+        if (sigTime > threemonthslast)
+            return NULL;
+
         CColdStaking clsr;
         clsr.vin                        = vin;
         clsr.sigTime                    = sigTime;
@@ -158,18 +175,18 @@ public:
         if (!GetTransaction(vin.prevout.hash, tx, hashBlock, true))
             return NULL;
         if (tx.vout[vin.prevout.n].nValue == 1000 * COIN) { //exactly
-			CTxDestination address1;
-			CScript pubScript;
-			pubScript = tx.vout[vin.prevout.n].scriptPubKey;
-			ExtractDestination(pubScript, address1);
-			//example CScript scriptPubKey = GetScriptForDestination(CTxDestination DecodeDestination(StdString));        
-			LogPrintf("Add cold staking script address %s coin %s\n", EncodeDestination(address1), tx.vout[vin.prevout.n].nValue);
-			clsr.pubKeyCollateralAddress    = GetScriptForDestination(address1);
-			clsr.strAddress = EncodeDestination(address1);
-			colstaklist.mapColdStaking.insert(make_pair(clsr.GetHash(), clsr));
-			pwalletMain->LockCoin(colstaklist.mapColdStaking[clsr.GetHash()].vin.prevout);
-			colstaklist.mapColdStaking[clsr.GetHash()].Relay();
-			return &colstaklist.mapColdStaking[clsr.GetHash()];
+            CTxDestination address1;
+            CScript pubScript;
+            pubScript = tx.vout[vin.prevout.n].scriptPubKey;
+            ExtractDestination(pubScript, address1);
+            //example CScript scriptPubKey = GetScriptForDestination(CTxDestination DecodeDestination(StdString));        
+            LogPrintf("Add cold staking script address %s coin %s\n", EncodeDestination(address1), tx.vout[vin.prevout.n].nValue);
+            clsr.pubKeyCollateralAddress    = GetScriptForDestination(address1);
+            clsr.strAddress = EncodeDestination(address1);
+            colstaklist.mapColdStaking.insert(make_pair(clsr.GetHash(), clsr));
+            pwalletMain->LockCoin(colstaklist.mapColdStaking[clsr.GetHash()].vin.prevout);
+            colstaklist.mapColdStaking[clsr.GetHash()].Relay();
+            return &colstaklist.mapColdStaking[clsr.GetHash()];
         }
         return NULL;
     }
@@ -183,9 +200,9 @@ public:
     }
     void CheckOld()
     {
-        int64_t threemonths = 60 * 60 * 24 * 30 * 3;
+        int64_t threemonthslast = 60 * 60 * 24 * 30 * 3 + GetTime();
         BOOST_FOREACH(PAIRTYPE(const uint256, CColdStaking)& coldstak, mapColdStaking) {
-            if (coldstak.second.sigTime > GetTime() + threemonths)
+            if (coldstak.second.sigTime > threemonthslast)
                 DeleteHash(coldstak.first);
         }
     }

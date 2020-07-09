@@ -45,37 +45,39 @@ WalletView::WalletView(QWidget* parent) : QStackedWidget(parent),
     overviewPage = new OverviewPage();
     explorerWindow = new BlockExplorer(this);
     transactionsPage = new QWidget(this);
+    transactionsPage->setObjectName(QStringLiteral("WtransactionsPage"));
 
     // Create Header with the same names as the other forms to be CSS-Id compatible
     QFrame *frame_Header = new QFrame(transactionsPage);
     frame_Header->setObjectName(QStringLiteral("frame_Header"));
+    frame_Header->setContentsMargins(8, 8, 8, 8);
 
     QVBoxLayout* verticalLayout_8 = new QVBoxLayout(frame_Header);
     verticalLayout_8->setObjectName(QStringLiteral("verticalLayout_8"));
-    verticalLayout_8->setContentsMargins(0, 0, 0, 0);
+    
 
     QHBoxLayout* horizontalLayout_Header = new QHBoxLayout();
     horizontalLayout_Header->setObjectName(QStringLiteral("horizontalLayout_Header"));
 
     QLabel* labelOverviewHeaderLeft = new QLabel(frame_Header);
     labelOverviewHeaderLeft->setObjectName(QStringLiteral("labelOverviewHeaderLeft"));
-    labelOverviewHeaderLeft->setMinimumSize(QSize(464, 60));
-    labelOverviewHeaderLeft->setMaximumSize(QSize(16777215, 60));
-    labelOverviewHeaderLeft->setText(tr("HISTORY"));
+    labelOverviewHeaderLeft->setMinimumSize(QSize(464, 20));
+    labelOverviewHeaderLeft->setMaximumSize(QSize(16777215, 20));
+    labelOverviewHeaderLeft->setText(tr("History"));
     QFont fontHeaderLeft;
     fontHeaderLeft.setPointSize(20);
     fontHeaderLeft.setBold(true);
     fontHeaderLeft.setWeight(75);
     labelOverviewHeaderLeft->setFont(fontHeaderLeft);
 
+    QSpacerItem* horizontalSpacer_3 = new QSpacerItem(20, 20, QSizePolicy::Minimum, QSizePolicy::Minimum);
     horizontalLayout_Header->addWidget(labelOverviewHeaderLeft);
-    QSpacerItem* horizontalSpacer_3 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
     horizontalLayout_Header->addItem(horizontalSpacer_3);
 
     QLabel* labelOverviewHeaderRight = new QLabel(frame_Header);
     labelOverviewHeaderRight->setObjectName(QStringLiteral("labelOverviewHeaderRight"));
-    labelOverviewHeaderRight->setMinimumSize(QSize(464, 60));
-    labelOverviewHeaderRight->setMaximumSize(QSize(16777215, 60));
+    labelOverviewHeaderRight->setMinimumSize(QSize(464, 20));
+    labelOverviewHeaderRight->setMaximumSize(QSize(16777215, 20));
     labelOverviewHeaderRight->setText(QString());
     QFont fontHeaderRight;
     fontHeaderRight.setPointSize(14);
@@ -92,6 +94,7 @@ WalletView::WalletView(QWidget* parent) : QStackedWidget(parent),
     vbox->addWidget(frame_Header);
 
     transactionView = new TransactionView(this);
+    transactionView->setContentsMargins(20, 0, 20, 0);
     vbox->addWidget(transactionView);
     QPushButton* exportButton = new QPushButton(tr("&Export"), this);
     exportButton->setToolTip(tr("Export the data in the current tab to a file"));

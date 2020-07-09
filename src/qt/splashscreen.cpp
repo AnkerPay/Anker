@@ -21,6 +21,7 @@
 #include <QCloseEvent>
 #include <QDesktopWidget>
 #include <QPainter>
+#include <QPushButton>
 
 SplashScreen::SplashScreen(Qt::WindowFlags f, const NetworkStyle* networkStyle) : QWidget(0, f), curAlignment(0)
 {
@@ -68,9 +69,9 @@ SplashScreen::SplashScreen(Qt::WindowFlags f, const NetworkStyle* networkStyle) 
 
     // draw copyright stuff
     pixPaint.setFont(QFont(font, 10 * fontFactor));
-    pixPaint.drawText(paddingLeft, paddingTop + titleCopyrightVSpace, copyrightTextBtc);
-    pixPaint.drawText(paddingLeft, paddingTop + titleCopyrightVSpace + 12, copyrightTextDash);
-    pixPaint.drawText(paddingLeft, paddingTop + titleCopyrightVSpace + 24, copyrightTextPIVX);
+//    pixPaint.drawText(paddingLeft, paddingTop + titleCopyrightVSpace, copyrightTextBtc);
+//    pixPaint.drawText(paddingLeft, paddingTop + titleCopyrightVSpace + 12, copyrightTextDash);
+//    pixPaint.drawText(paddingLeft, paddingTop + titleCopyrightVSpace + 24, copyrightTextPIVX);
     pixPaint.drawText(paddingLeft, paddingTop + titleCopyrightVSpace + 36, copyrightTextAnker);
 
     // draw additional text if special network
@@ -84,17 +85,26 @@ SplashScreen::SplashScreen(Qt::WindowFlags f, const NetworkStyle* networkStyle) 
     }
 
     pixPaint.end();
-
+    
+//         QPushButton* personal1Icon = new QPushButton(this);
+//         personal1Icon->setObjectName("personalSplashIcon");
+//         personal1Icon->setFlat(true); // Make the button look like a label, but clickable
+//         personal1Icon->setStyleSheet(".QPushButton { background-color: transparent;}");
+//         personal1Icon->setFixedSize(38, 38);
+//         QIcon personal1Item = QIcon(":/icons/personal").pixmap(38, 38);
+//         personal1Icon->setIcon(personal1Item);
+//         
     // Set window title
     setWindowTitle(titleText + " " + titleAddText);
 
     // Resize window and move to center of desktop, disallow resizing
     QRect r(QPoint(), pixmap.size());
     resize(r.size());
-    setFixedSize(r.size());
+    //setFixedSize(r.size());
     move(QApplication::desktop()->screenGeometry().center() - r.center());
 
     subscribeToCoreSignals();
+    
 }
 
 SplashScreen::~SplashScreen()

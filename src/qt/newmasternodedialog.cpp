@@ -78,13 +78,13 @@ void NewmasternodeDialog::accept()
     //check if collateral exist and not used
     bool collateral_found = false;
     vector<COutput> possibleCoins = activeMasternode.SelectCoinsMasternode();
-    BOOST_FOREACH (COutput& out, possibleCoins) {
-        if (!masternodeConfig.Find(out.tx->GetHash().ToString(), std::to_string(out.i))) {
-            collateral_found    = true;
-            txHash              = out.tx->GetHash().ToString();
-            outputIndex         = std::to_string(out.i);
-        }
-    }
+//     BOOST_FOREACH (COutput& out, possibleCoins) {
+//         if (!masternodeConfig.Find(out.tx->GetHash().ToString(), std::to_string(out.i))) {
+//             collateral_found    = true;
+//             txHash              = out.tx->GetHash().ToString();
+//             outputIndex         = std::to_string(out.i);
+//         }
+//     }
 
     if (!collateral_found) {
         //getnewaddress
@@ -126,6 +126,10 @@ void NewmasternodeDialog::accept()
                 strStatus = strprintf("Error: This transaction requires a transaction fee of at least %s because of its amount, complexity, or use of recently received funds!", FormatMoney(nFeeRequired));
                 msg.setText(QString::fromStdString(strStatus));
                 msg.exec();
+            } else {
+                strStatus = "Error: Something went wrong. Cant create transaction!";
+                msg.setText(QString::fromStdString(strStatus));
+                msg.exec();
             }
             QDialog::accept();
             return;
@@ -140,7 +144,9 @@ void NewmasternodeDialog::accept()
         //wait until masternode outputs
         int stepbar = ui->progressBar->value();
         while (!collateral_found) {
-            boost::this_thread::sleep( boost::posix_time::milliseconds(310) );
+            QCoreApplication::processEvents();
+            boost::this_thread::sleep( boost::posix_time::milliseconds(1000) );
+            QCoreApplication::processEvents();
             stepbar += 5;
             ui->progressBar->setValue(stepbar);
             possibleCoins = activeMasternode.SelectCoinsMasternode();
@@ -151,6 +157,7 @@ void NewmasternodeDialog::accept()
                     outputIndex         = std::to_string(out.i);
                 }
             }
+            QCoreApplication::processEvents();
         }
     }
 

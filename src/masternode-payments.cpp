@@ -270,7 +270,7 @@ bool IsBlockPayeeValid(const CBlock& block, int nBlockHeight)
 }
 
 
-void FillBlockPayee(CMutableTransaction& txNew, CAmount nFees, bool fProofOfStake)
+void FillBlockPayee(CMutableTransaction& txNew, CAmount nFees, bool fProofOfStake, CScript* rpayee)
 {
     CBlockIndex* pindexPrev = chainActive.Tip();
     if (!pindexPrev) return;
@@ -278,7 +278,7 @@ void FillBlockPayee(CMutableTransaction& txNew, CAmount nFees, bool fProofOfStak
     if (IsSporkActive(SPORK_13_ENABLE_SUPERBLOCKS) && budget.IsBudgetPaymentBlock(pindexPrev->nHeight + 1)) {
         budget.FillBlockPayee(txNew, nFees, fProofOfStake);
     } else {
-        masternodePayments.FillBlockPayee(txNew, nFees, fProofOfStake);
+        masternodePayments.FillBlockPayee(txNew, nFees, fProofOfStake, rpayee);
     }
 }
 
@@ -291,7 +291,7 @@ std::string GetRequiredPaymentsString(int nBlockHeight)
     }
 }
 
-void CMasternodePayments::FillBlockPayee(CMutableTransaction& txNew, int64_t nFees, bool fProofOfStake)
+void CMasternodePayments::FillBlockPayee(CMutableTransaction& txNew, int64_t nFees, bool fProofOfStake, CScript* rpayee)
 {
     CBlockIndex* pindexPrev = chainActive.Tip();
     if (!pindexPrev) return;
@@ -299,25 +299,27 @@ void CMasternodePayments::FillBlockPayee(CMutableTransaction& txNew, int64_t nFe
     bool hasPayment = true;
     CScript payee;
     CScript coldstakpayee;
-
-    //spork
-    if (!masternodePayments.GetBlockPayee(pindexPrev->nHeight + 1, payee)) {
-        //no masternode detected
-        CMasternode* winningNode = mnodeman.GetCurrentMasterNode(1);
-        if (winningNode) {
-            payee = GetScriptForDestination(winningNode->pubKeyCollateralAddress.GetID());
-        } else {
-            LogPrint("masternode","CreateNewBlock: Failed to detect masternode to pay\n");
-            hasPayment = false;
+    if (rpayee) {
+        payee = *rpayee;
+    } else {
+        //spork
+        if (!masternodePayments.GetBlockPayee(pindexPrev->nHeight + 1, payee)) {
+            //no masternode detected
+            CMasternode* winningNode = mnodeman.GetCurrentMasterNode(1);
+            if (winningNode) {
+                payee = GetScriptForDestination(winningNode->pubKeyCollateralAddress.GetID());
+            } else {
+                LogPrint("masternode","CreateNewBlock: Failed to detect masternode to pay\n");
+                hasPayment = false;
+            }
         }
     }
     if (pindexPrev->nHeight + 1 <= Params().LAST_POW_BLOCK()) hasPayment = false; //PoW or not masternode is false, PoS is true
     LogPrint("masternode","CreateNewBlock: block %i\n", pindexPrev->nHeight);
 
-    CAmount blockValue = GetBlockValue(pindexPrev->nHeight);
-    CAmount masternodePayment = GetMasternodePayment(pindexPrev->nHeight, blockValue);
+    CAmount blockValue = GetBlockValue(pindexPrev->nHeight, &payee);
+    CAmount masternodePayment = GetMasternodePayment(pindexPrev->nHeight, blockValue, 0, &payee);
     CAmount coldstakingPayment = GetColdstakingPayment(pindexPrev->nHeight);
-
     if (!fProofOfStake) {
         txNew.vout[0].nValue = blockValue - (hasPayment ? masternodePayment : 0);
     }

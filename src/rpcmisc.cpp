@@ -126,7 +126,7 @@ UniValue getinfo(const UniValue& params, bool fHelp)
         zankObj.push_back(Pair(to_string(denom), ValueFromAmount(chainActive.Tip()->mapZerocoinSupply.at(denom) * (denom*COIN))));
     }
     zankObj.push_back(Pair("total", ValueFromAmount(chainActive.Tip()->GetZerocoinSupply())));
-//    obj.push_back(Pair("zANKsupply", zankObj));
+    obj.push_back(Pair("zANKsupply", zankObj));
     
 #ifdef ENABLE_WALLET
     if (pwalletMain) {

@@ -100,7 +100,7 @@ private slots:
     void on_pushButtonMintReset_clicked();
     void on_pushButtonSpentReset_clicked();
     void on_pushButtonSpendzANK_clicked();
-    void on_pushButtonZAnkControl_clicked();
+//    void on_pushButtonZAnkControl_clicked();
     void on_pasteButton_clicked();
     void updateDisplayUnit();
     void updateSPORK16Status();

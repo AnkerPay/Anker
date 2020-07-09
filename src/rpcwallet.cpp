@@ -439,21 +439,21 @@ UniValue setupcoldstaking(const UniValue& params, bool fHelp)
     std::string outputIndex;
     std::string alias;
     
-    pwalletMain->AvailableCoins(vCoins);
-    BOOST_FOREACH (const COutput& out, vCoins) {
-        if (out.tx->vout[out.i].nValue == 1000 * COIN) { //exactly
-            possibleCoins.push_back(out);
-        }
-    }
-    
-    BOOST_FOREACH (COutput& out, possibleCoins) {
-        txvin = CTxIn(out.tx->GetHash(), uint32_t(out.i));
-        if (!colstaklist.Find(txvin)) {
-            collateral_found    = true;
-            txHash              = out.tx->GetHash().ToString();
-            outputIndex         = std::to_string(out.i);
-        }
-    }
+//     pwalletMain->AvailableCoins(vCoins);
+//     BOOST_FOREACH (const COutput& out, vCoins) {
+//         if (out.tx->vout[out.i].nValue == 1000 * COIN) { //exactly
+//             possibleCoins.push_back(out);
+//         }
+//     }
+//     
+//     BOOST_FOREACH (COutput& out, possibleCoins) {
+//         txvin = CTxIn(out.tx->GetHash(), uint32_t(out.i));
+//         if (!colstaklist.Find(txvin)) {
+//             collateral_found    = true;
+//             txHash              = out.tx->GetHash().ToString();
+//             outputIndex         = std::to_string(out.i);
+//         }
+//     }
 
     if (!collateral_found) {
 
@@ -510,6 +510,7 @@ UniValue setupcoldstaking(const UniValue& params, bool fHelp)
                     outputIndex         = std::to_string(out.i);
                 }
             }
+            sleep(1);
         }
     }
     // coldstakConfig add entry
