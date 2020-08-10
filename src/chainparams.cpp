@@ -93,7 +93,7 @@ static const Checkpoints::CCheckpointData dataTestnet = {
     250};
 
 static Checkpoints::MapCheckpoints mapCheckpointsRegtest =
-    boost::assign::map_list_of(0, uint256("0x2b1a0f66712aad59ad283662d5b919415a25921ce89511d73019107e380485bf"));
+    boost::assign::map_list_of(0, uint256("64e8ee4da3e1883840bbb4b5a123f71f61157ec97d7c12a1e7a236c3bc78bdd3"));
 static const Checkpoints::CCheckpointData dataRegtest = {
     &mapCheckpointsRegtest,
     1597078002,
@@ -342,22 +342,22 @@ public:
         bnProofOfWorkLimit = ~uint256(0) >> 1;
         genesis.nTime = 1597078002;
         genesis.nBits = 0x207fffff;
-        genesis.nNonce = 0;
+        genesis.nNonce = 1;
         nMaturity = 0;
         nLastPOWBlock = 999999999; // PoS complicates Regtest because of timing issues
         nZerocoinLastOldParams = 2147483646;
         nZerocoinStartHeight = 2147483646;
 
 
-        uint256 hash;
-        CBlockHeader genesisHeader = genesis.GetBlockHeader();
-        GenerateGenesisBlock(genesisHeader, hash);
+//        uint256 hash;
+//        CBlockHeader genesisHeader = genesis.GetBlockHeader();
+//        GenerateGenesisBlock(genesisHeader, hash);
 
  
 
         hashGenesisBlock = genesis.GetHash();
         nDefaultPort = 12366;
-        assert(hashGenesisBlock == uint256("6dd99a0aa7c3f12739aa1566f3c992a91881a5490ac82152a2109dec5a1b9aab"));
+        assert(hashGenesisBlock == uint256("64e8ee4da3e1883840bbb4b5a123f71f61157ec97d7c12a1e7a236c3bc78bdd3"));
 
         bech32_hrp = "ankt";
 
