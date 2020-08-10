@@ -171,9 +171,9 @@ public:
         genesis.nNonce = 2;
 
 
-//         uint256 hash;
-//         CBlockHeader genesisHeader = genesis.GetBlockHeader();
-//         GenerateGenesisBlock(genesisHeader, hash);
+         uint256 hash;
+         CBlockHeader genesisHeader = genesis.GetBlockHeader();
+         GenerateGenesisBlock(genesisHeader, hash);
 
 
 
