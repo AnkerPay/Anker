@@ -168,7 +168,7 @@ public:
         genesis.nVersion = 1;
         genesis.nTime = 1597078000;
         genesis.nBits = 0x207fffff;;
-        genesis.nNonce = 2;
+        genesis.nNonce = 1;
 
 
          uint256 hash;
@@ -347,13 +347,13 @@ public:
         nLastPOWBlock = 999999999; // PoS complicates Regtest because of timing issues
         nZerocoinLastOldParams = 2147483646;
         nZerocoinStartHeight = 2147483646;
-/*
+
 
         uint256 hash;
         CBlockHeader genesisHeader = genesis.GetBlockHeader();
         GenerateGenesisBlock(genesisHeader, hash);
 
- */
+ 
 
         hashGenesisBlock = genesis.GetHash();
         nDefaultPort = 12366;
