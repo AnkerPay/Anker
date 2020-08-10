@@ -166,7 +166,7 @@ public:
         genesis.hashPrevBlock = 0;
         genesis.hashMerkleRoot = genesis.BuildMerkleTree();
         genesis.nVersion = 1;
-        genesis.nTime = 1539180000;
+        genesis.nTime = 1597078000;
         genesis.nBits = 0x207fffff;;
         genesis.nNonce = 2;
 
@@ -268,7 +268,7 @@ public:
         nZerocoinLastOldParams = 2147483646;
 
         //! Modify the testnet genesis block so the timestamp is valid for a later start.
-        genesis.nTime = 1539180001;
+        genesis.nTime = 1597078001;
         genesis.nNonce = 0;
 
 /*
@@ -340,7 +340,7 @@ public:
         nTargetTimespan = 30;  // Anker: 30 sec
         nTargetSpacing = 1 * 30;        // Anker: 30sec
         bnProofOfWorkLimit = ~uint256(0) >> 1;
-        genesis.nTime = 1539180002;
+        genesis.nTime = 1597078002;
         genesis.nBits = 0x207fffff;
         genesis.nNonce = 0;
         nMaturity = 0;
