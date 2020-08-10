@@ -156,7 +156,7 @@ public:
         nModifierUpdateBlock = 100;
         nZerocoinStartHeight = 101;
 
-        const char* pszTimestamp = "10 Octobar 2018";
+        const char* pszTimestamp = "His face was that of a man who had suffered all he could. Acute misery lay behind him now, but there was nothing to lure him on towards happiness.";
         CMutableTransaction txNew;
         txNew.vin.resize(1);
         txNew.vout.resize(1);
@@ -169,13 +169,13 @@ public:
         genesis.nTime = 1539180000;
         genesis.nBits = 0x207fffff;;
         genesis.nNonce = 2;
-/*
+
 
         uint256 hash;
         CBlockHeader genesisHeader = genesis.GetBlockHeader();
         GenerateGenesisBlock(genesisHeader, hash);
 
- */
+
 
         hashGenesisBlock = genesis.GetHash();
         assert(hashGenesisBlock == uint256("776f5f3a233a5cc346824951779a2f4f6f7039de5ffedaa4a8547f2c9fcfff18"));

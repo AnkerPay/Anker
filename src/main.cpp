@@ -90,7 +90,7 @@ unsigned int nCoinCacheSize = 5000;
 unsigned int nBytesPerSigOp = DEFAULT_BYTES_PER_SIGOP;
 bool fAlerts = DEFAULT_ALERTS;
 
-unsigned int nStakeMinAge = 48 * 60 * 60;
+unsigned int nStakeMinAge = 2 * 60 * 60;
 //unsigned int nStakeMinAge = 3*60;
 int64_t nReserveBalance = 0;
 
