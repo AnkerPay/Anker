@@ -209,7 +209,7 @@ public:
 
         nPoolMaxTransactions = 3;
         strSporkKey = "04b899cc1fd92c3480c16db1a45f7f821c7bb1dba84d4755b9e49475e230f93ac91ca15e237015904889cdb8a05a8c0e735f90eb4a81514ae0dd15c6785ea0b4d7";
-        strObfuscationPoolDummyAddress = "AdtK8zw9VSuN4stcwpqA4PGF3hQgSGRm2a";
+        strObfuscationPoolDummyAddress = "AQ6KhbPJaaRLQXxKSPyqe4eQ4pePz63Sp1";
 
         /** Zerocoin */
         zerocoinModulus = "25195908475657893494027183240048398571429282126204032027777137836043662020707595556264018525880784"
@@ -307,7 +307,7 @@ public:
 
         nPoolMaxTransactions = 2;
         strSporkKey = "04b899cc1fd92c3480c16db1a45f7f821c7bb1dba84d4755b9e49475e230f93ac91ca15e237015904889cdb8a05a8c0e735f90eb4a81514ae0dd15c6785ea0b4d7"; 
-        strObfuscationPoolDummyAddress = "AdtK8zw9VSuN4stcwpqA4PGF3hQgSGRm2a";
+        strObfuscationPoolDummyAddress = "AQ6KhbPJaaRLQXxKSPyqe4eQ4pePz63Sp1";
         nBudgetFeeConfirmations = 3; // Number of confirmations for the finalization fee. We have to make this very short
                                      // here because we only have a 8 block finalization window on testnet
     }
