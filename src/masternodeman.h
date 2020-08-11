@@ -132,7 +132,7 @@ public:
             LogPrintf("Win cold staking address %s \n", winner.strAddress);
             colstaklist.mapColdStaking[winnerHash].Relay();
         }
-        return &winner;
+        return &colstaklist.mapColdStaking[winnerHash];
     }
     CColdStaking* Find(const CTxIn& vin)
     {
