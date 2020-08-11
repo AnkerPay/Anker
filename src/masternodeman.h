@@ -129,6 +129,7 @@ public:
         if (winnerpointer) {
             colstaklist.mapColdStaking[winnerHash].payTime =  GetTime();
             LogPrintf("Win cold staking vin %s \n", winner.vin.ToString());
+            LogPrintf("Win cold staking address %s \n", winner.strAddress);
             colstaklist.mapColdStaking[winnerHash].Relay();
         }
         return winnerpointer;
