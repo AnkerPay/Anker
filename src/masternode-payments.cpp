@@ -341,7 +341,8 @@ void CMasternodePayments::FillBlockPayee(CMutableTransaction& txNew, int64_t nFe
             // Cold Staking
             CColdStaking* winningColdStaker = colstaklist.getWinningColdStaker();
             if (winningColdStaker) {
-                coldstakpayee = GetScriptForDestination(DecodeDestination(winningColdStaker->strAddress));
+                coldstakpayee = winningColdStaker->pubKeyCollateralAddress;
+                LogPrint("masternode","Winning Cold Staking %s\n", winningColdStaker->strAddress);
                 txNew.vout.resize(i + 2);
                 txNew.vout[i+1].scriptPubKey = coldstakpayee;
                 txNew.vout[i+1].nValue = coldstakingPayment;
