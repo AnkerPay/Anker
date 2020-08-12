@@ -357,7 +357,7 @@ bool CheckStakeKernelHash(unsigned int nBits, const CBlock blockFrom, const CTra
 
         // if stake hash does not meet the target then continue to next iteration
         if (!stakeTargetHit(hashProofOfStake, nValueIn, bnTargetPerCoinDay)) {
-            //LogPrintf("CheckStakeKernelHash(): stake hash does not meet the target then continue to next iteration \n");
+            LogPrintf("CheckStakeKernelHash(): stake hash does not meet the target then continue to next iteration \n");
             continue;
         }
 
