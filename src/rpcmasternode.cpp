@@ -296,11 +296,33 @@ UniValue searchcoldstaking(const UniValue& params, bool fHelp)
             "searchcoldstaking  address\n"
             "\nsearch cold stakers\n"
             "\nExamples:\n" +
-            HelpExampleCli("listcoldstakers", "") + HelpExampleRpc("listcoldstakers", ""));
+            HelpExampleCli("searchcoldstaking", "") + HelpExampleRpc("searchcoldstaking", ""));
 
     UniValue ret(UniValue::VARR);
     BOOST_FOREACH(PAIRTYPE(const uint256, CColdStaking)& coldstak, colstaklist.mapColdStaking) {
 		if (coldstak.second.strAddress == params[0].get_str()) {
+			UniValue obj(UniValue::VOBJ);
+			obj.push_back(Pair("Address", coldstak.second.strAddress));
+			obj.push_back(Pair("sigTime", coldstak.second.sigTime));
+			obj.push_back(Pair("payTime", coldstak.second.payTime));
+			ret.push_back(obj);
+		}
+    }
+    return ret;
+}
+UniValue searchcoldstakinghash(const UniValue& params, bool fHelp)
+{
+
+    if (fHelp || (params.size() != 1))
+        throw runtime_error(
+            "searchcoldstakinghash  hash\n"
+            "\nsearch cold stakers\n"
+            "\nExamples:\n" +
+            HelpExampleCli("searchcoldstakinghash", "") + HelpExampleRpc("searchcoldstakinghash", ""));
+
+    UniValue ret(UniValue::VARR);
+    BOOST_FOREACH(PAIRTYPE(const uint256, CColdStaking)& coldstak, colstaklist.mapColdStaking) {
+		if (coldstak.second.vin.prevout.hash.ToString() == params[0].get_str()) {
 			UniValue obj(UniValue::VOBJ);
 			obj.push_back(Pair("Address", coldstak.second.strAddress));
 			obj.push_back(Pair("sigTime", coldstak.second.sigTime));

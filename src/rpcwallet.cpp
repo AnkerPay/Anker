@@ -403,8 +403,8 @@ UniValue newcoldstaking(const UniValue& params, bool fHelp)
             "\nNew Cold Sataking.\n"
             "\nExamples:\n" +
             HelpExampleCli("newcoldstaking", "txhash 1"));
-
-	CTxIn txin = CTxIn(uint256S(params[0].get_str()), uint32_t(params[1].get_int()));
+  int nonce =  boost::lexical_cast<int>(params[1].get_str());
+	CTxIn txin = CTxIn(uint256S(params[0].get_str()), uint32_t(nonce));
 	CColdStaking* pmn = colstaklist.FindorAdd(txin);
 	if (pmn == NULL) {
 		return "Error.";
