@@ -179,7 +179,7 @@ public:
             CCoinsViewCache view(pcoinsTip);
             if (!view.HaveCoins(vin.prevout.hash)) {
               return NULL;
-              LogPrintf("Reject cold staking script %s \n", vin.prevout.hash);
+              LogPrintf("Reject cold staking script %s \n", vin.prevout.hash.ToString());
             }
             
             CTxDestination address1;
