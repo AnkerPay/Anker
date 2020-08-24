@@ -178,8 +178,9 @@ public:
         if (tx.vout[vin.prevout.n].nValue == 1000 * COIN) { //exactly
             CCoinsViewCache view(pcoinsTip);
             if (!view.HaveCoins(vin.prevout.hash)) {
-              return NULL;
               LogPrintf("Reject cold staking script %s \n", vin.prevout.hash.ToString());
+              return NULL;
+              
             }
             
             CTxDestination address1;
