@@ -176,6 +176,12 @@ public:
         if (!GetTransaction(vin.prevout.hash, tx, hashBlock, true))
             return NULL;
         if (tx.vout[vin.prevout.n].nValue == 1000 * COIN) { //exactly
+            CCoinsViewCache view(pcoinsTip);
+            if (!view.HaveCoins(vin.prevout.hash)) {
+              return NULL;
+              LogPrintf("Reject cold staking script %s \n", vin.prevout.hash);
+            }
+            
             CTxDestination address1;
             CScript pubScript;
             pubScript = tx.vout[vin.prevout.n].scriptPubKey;
