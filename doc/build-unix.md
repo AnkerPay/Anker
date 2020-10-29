@@ -216,3 +216,23 @@ Hardening enables the following features:
 	RW- R-- RW-
 
     The STK RW- means that the stack is readable and writeable but not executable.
+    
+Build
+---------------------
+
+```bash
+apt update
+apt install build-essential libtool autotools-dev autoconf pkg-config libssl-dev libevent-dev
+apt install software-properties-common 
+apt-add-repository -y ppa:bitcoin/bitcoin 
+apt update
+apt install apt-utils git libwww-perl automake libgmp3-dev bsdmainutils libboost-all-dev libqrencode-dev libminiupnpc-dev libcurl4-openssl-dev libdb4.8-dev libdb4.8++-dev
+
+git clone https://github.com/AnkerPay/Anker.git
+cd Anker/depends/
+make
+cd ..
+./autogen.sh
+./configure
+make
+```
